@@ -9,6 +9,7 @@ export default function LoginPage() {
       <h2>Login Page</h2>
       <Input type="text" placeholder="Username" />
       <Button className="w-20 self-center">Login</Button>
+      <p>After login, navigate to the personal page of the Fundraiser / Coordinator? -- Cathy</p>
     </div>
   );
 }
