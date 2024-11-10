@@ -1,62 +1,345 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {Checkbox} from "@/components/ui/checkbox";
+import Papa from "papaparse";
+
 
 export default function FundraiserPage() {
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
   const events = [
-    { id: 1, name: "Event 1", details: "Details for Event 1", tasks: 14, totalTasks: 20, donors: 3, totalDonors: 15 },
-    { id: 2, name: "Event 2", details: "Details for Event 2", tasks: 10, totalTasks: 20, donors: 5, totalDonors: 15 },
-    { id: 3, name: "Event 3", details: "Details for Event 3", tasks: 18, totalTasks: 20, donors: 12, totalDonors: 15 },
+    {
+      id: 1,
+      name: "Event 1",
+      details: "Details for Event 1",
+      date: "2024/11/10",
+      time: "14:00:00",
+      location: "Victoria",
+      theme: "Community Outreach",
+      tasks: 14,
+      totalTasks: 20,
+      donors: 3,
+      totalDonors: 15,
+    },
+    {
+      id: 2,
+      name: "Event 2",
+      details: "Details for Event 2",
+      date: "2024/12/05",
+      time: "18:30:00",
+      location: "Vancouver",
+      theme: "Environmental Awareness",
+      tasks: 10,
+      totalTasks: 20,
+      donors: 5,
+      totalDonors: 15,
+    },
+    {
+      id: 3,
+      name: "Event 3",
+      details: "Details for Event 3",
+      date: "2024/12/20",
+      time: "09:00:00",
+      location: "Nanaimo",
+      theme: "Health and Wellness",
+      tasks: 18,
+      totalTasks: 20,
+      donors: 12,
+      totalDonors: 15,
+    },
   ];
 
+  const [selectedEvent, setSelectedEvent] = useState(events[0]);
+  const [view, setView] = useState("tasks"); // State to toggle between tasks and donors
+  const [donors, setDonors] = useState([]); // State to store donor data
+  const [loading, setLoading] = useState(false); // Loading state for fetching data
+  const [invitedCount, setInvitedCount] = useState(0); // Count of invited donors
+
+
+  useEffect(() => {
+    if (view === "donors") {
+      fetchDonors();
+    }
+  }, [view, selectedEvent]);
+
+  const fetchDonors = async () => {
+    setLoading(true);
+    const location = selectedEvent.location;
+    const url = `https://bc-cancer-faux.onrender.com/event?cities=${location}&format=csv`;
+    try {
+      const response = await fetch(url);
+      const csvText = await response.text();
+      Papa.parse(csvText, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          const donorData = result.data.map(donor => ({
+            name: `${donor.first_name} ${donor.last_name}`,
+            communicationPreference: donor.communication_preference,
+            invited: false, // Default unchecked
+          }));
+          setDonors(donorData);
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching donor data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleInvitation = (index) => {
+    setDonors(prevDonors => {
+      const updatedDonors = prevDonors.map((donor, i) =>
+        i === index ? { ...donor, invited: !donor.invited } : donor
+      );
+      const newInvitedCount = updatedDonors.filter(donor => donor.invited).length;
+      setInvitedCount(newInvitedCount);
+      return updatedDonors;
+    });
+  };
+
+
+  const [tasks, setTasks] = useState([
+    { id: 1, text: "undone task1", status: "undone" },
+    { id: 2, text: "undone task2", status: "undone" },
+    { id: 3, text: "in progress task1", status: "in progress" },
+    { id: 4, text: "task done1", status: "done" },
+  ]);
+  const [newTaskText, setNewTaskText] = useState("");
+
+  const handleAddTask = () => {
+    if (newTaskText.trim()) {
+      setTasks([...tasks, { id: Date.now(), text: newTaskText, status: "undone" }]);
+      setNewTaskText("");
+    }
+  };
+
+  // Function to toggle task status
+  const toggleTaskStatus = (taskId) => {
+    setTasks(tasks.map(task => {
+      if (task.id === taskId) {
+        const newStatus = task.status === "undone"
+          ? "done"
+          : task.status === "done"
+            ? "in-progress"
+            : "undone";
+        return { ...task, status: newStatus };
+      }
+      return task;
+    }));
+  };
+
+  const calculateProgress = () => {
+    const doneTasks = tasks.filter(task => task.status === "done").length;
+    return (doneTasks / tasks.length) * 100;
+  };
+
+  function CustomCheckbox({ checked, indeterminate, onChange }) {
+    const checkboxRef = useRef(null);
+
+    useEffect(() => {
+      if (!checkboxRef.current) {
+        return;
+      }
+      checkboxRef.current.indeterminate = indeterminate;
+    }, [indeterminate]);
+
+    return (
+      <input
+        type="checkbox"
+        ref={checkboxRef}
+        checked={checked}
+        onChange={onChange}
+        className="mr-2"
+      />
+    );
+  }
+
+
   return (
-    <div className="flex justify-center mt-64 mx-auto w-3/4 max-w-2xl flex-col gap-5">
-      <h2>Fundraiser Page</h2>
-      <p>This page will have 3 vertical columns.</p>
+    <div className="flex mt-32 mx-auto max-w-6xl flex-col gap-8">
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/staff">Staff</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbPage>Fundraiser</BreadcrumbPage>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      {/* Main Content */}
       <div className="flex">
-        <div className="w-1/6 p-4 border">
-          <h3>Event List</h3>
-          <ul>
-            {events.map((event) => (
-              <li
-                key={event.id}
-                className="cursor-pointer hover:bg-gray-200 p-2 mb-2 bg-blue-500 text-white rounded text-center"
-                onClick={() => setSelectedEvent(event)}
-              >
-                {event.name}
-              </li>
-            ))}
-          </ul>
+        {/* Event List Column */}
+        <div className="w-1/6 p-4">
+          <ScrollArea className="h-48">
+            <ul>
+              {events.map((event) => (
+                <li
+                  key={event.id}
+                  className="cursor-pointer hover:bg-gray-200 p-2 mb-2 rounded text-center"
+                  onClick={() => setSelectedEvent(event)}
+                >
+                  {event.name}
+                </li>
+              ))}
+            </ul>
+          </ScrollArea>
         </div>
-        <div className="w-5/12 p-4 border">
-          <h3>Event Details</h3>
-          {selectedEvent ? (
-            <div>
-              <h4>{selectedEvent.name}</h4>
-              <p>{selectedEvent.details}</p>
-              <button className="mt-4 p-2 bg-blue-500 text-white rounded">List of Tasks</button>
-              <div className="flex items-center mt-2">
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div className="bg-blue-500 h-2.5 rounded-full" style={{ width: `${(selectedEvent.tasks / selectedEvent.totalTasks) * 100}%` }}></div>
+
+        {/* Event Details Column */}
+        <div className="w-5/12 p-4">
+          <Card className="shadow-none">
+            <CardHeader>
+              <CardTitle>{selectedEvent.name}</CardTitle>
+              <CardDescription>{selectedEvent.details}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p><strong>Date:</strong> {selectedEvent.date}</p>
+              <p><strong>Time:</strong> {selectedEvent.time}</p>
+              <p><strong>Location:</strong> {selectedEvent.location}</p>
+              <p><strong>Theme:</strong> {selectedEvent.theme}</p>
+
+              <Button variant="outline" className="mt-4" onClick={() => setView("tasks")}>
+                List of Tasks
+              </Button>
+              <div className="mt-4">
+                <div className="flex items-center mt-2">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-green-500 h-2.5 rounded-full"
+                      style={{width: `${calculateProgress()}%`}}
+                    ></div>
+                  </div>
+                  <span className="ml-2">{tasks.filter(task => task.status === "done").length}/{tasks.length}</span>
                 </div>
-                <span className="ml-2">{selectedEvent.tasks}/{selectedEvent.totalTasks}</span>
               </div>
-              <button className="mt-4 p-2 bg-blue-500 text-white rounded">List of Donors</button>
-              <div className="flex items-center mt-2">
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div className="bg-blue-500 h-2.5 rounded-full" style={{ width: `${(selectedEvent.donors / selectedEvent.totalDonors) * 100}%` }}></div>
+
+              <Button variant="outline" className="mt-4" onClick={() => setView("donors")}>
+                List of Donors
+              </Button>
+              <div className="mt-4 flex items-center mt-2">
+
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-blue-500 h-2.5 rounded-full"
+                      style={{width: `${(invitedCount / donors.length) * 100}%`}}
+                    ></div>
+                  </div>
+                  <span className="ml-2">{invitedCount}/{donors.length}</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* List of Tasks or List of Donors Column */}
+        <div className="w-5/12 p-4">
+          {view === "tasks" ? (
+
+            <Card className="shadow-none mb-4">
+              <CardHeader>
+                <CardTitle>Tasks for {selectedEvent.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {/* Add Task Input */}
+                <div className="flex items-center mb-4">
+                  <Input
+                    placeholder="Add your new tasks..."
+                    value={newTaskText}
+                    onChange={(e) => setNewTaskText(e.target.value)}
+                    className="mr-2"
+                  />
+                  <Button variant="outline" onClick={handleAddTask}>Add</Button>
                 </div>
-                <span className="ml-2">{selectedEvent.donors}/{selectedEvent.totalDonors}</span>
-              </div>
-            </div>
-          ) : (
-            <p>Please select an event from the list.</p>
+
+                {/* Task List */}
+                <ul>
+                  {tasks.map((task) => (
+                    <li key={task.id} className="flex items-center mb-2">
+                      <CustomCheckbox
+                        checked={task.status === "done"}
+                        indeterminate={task.status === "in-progress"}
+                        onChange={() => toggleTaskStatus(task.id)}
+                      />
+                      <span
+                        className={
+                          task.status === "done"
+                            ? "line-through text-gray-500"
+                            : task.status === "in-progress"
+                              ? "text-gray-700"
+                              : ""
+                        }
+                      >
+                        {task.text}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+            ) : (
+            <Card className="shadow-none mb-4">
+              <CardHeader>
+                <CardTitle>Donors for {selectedEvent.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <>
+                  <div className="flex gap-2 mb-4">
+                    <Button onClick={() => setDonors([...donors].sort((a, b) => a.name.localeCompare(b.name)))}>Sort by Name</Button>
+                    <Button onClick={() => setDonors([...donors].sort((a, b) => a.communicationPreference.localeCompare(b.communicationPreference)))}>Sort by Preference</Button>
+                  </div>
+                  <ScrollArea className="h-48">
+                    <table className="w-full text-left">
+                      <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Communication Preference</th>
+                        <th>Invited</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {donors.map((donor, index) => (
+                        <tr key={index}>
+                          <td>{donor.name}</td>
+                          <td>{donor.communicationPreference}</td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={donor.invited}
+                              onChange={() => toggleInvitation(index)}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                      </tbody>
+                    </table>
+                  </ScrollArea>
+                </>
+              </CardContent>
+            </Card>
           )}
-        </div>
-        <div className="w-5/12 p-4 border">
-          <h3>List of Tasks or List of Donors</h3>
-          {/* Conditionally render list of tasks or list of donors here */}
         </div>
       </div>
     </div>
