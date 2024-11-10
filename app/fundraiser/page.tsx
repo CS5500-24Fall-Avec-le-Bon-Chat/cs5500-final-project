@@ -18,8 +18,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {Checkbox} from "@/components/ui/checkbox";
-import Papa from "papaparse";
+import Papa from 'papaparse';
 
 
 export default function FundraiserPage() {
@@ -88,7 +87,7 @@ export default function FundraiserPage() {
       Papa.parse(csvText, {
         header: true,
         skipEmptyLines: true,
-        complete: (result) => {
+        complete: (result: { data: boolean[]; }) => {
           const donorData = result.data.map(donor => ({
             name: `${donor.first_name} ${donor.last_name}`,
             communicationPreference: donor.communication_preference,
@@ -172,6 +171,9 @@ export default function FundraiserPage() {
     );
   }
 
+  const deleteTask = (taskId) => {
+    setTasks(tasks.filter(task => task.id !== taskId));
+  };
 
   return (
     <div className="flex mt-32 mx-auto max-w-6xl flex-col gap-8">
@@ -269,19 +271,27 @@ export default function FundraiserPage() {
                     placeholder="Add your new tasks..."
                     value={newTaskText}
                     onChange={(e) => setNewTaskText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleAddTask();
+                      }
+                    }}
                     className="mr-2"
                   />
                   <Button variant="outline" onClick={handleAddTask}>Add</Button>
                 </div>
 
-                {/* Task List */}
                 <ul>
                   {tasks.map((task) => (
-                    <li key={task.id} className="flex items-center mb-2">
-                      <CustomCheckbox
+                    <li
+                      key={task.id}
+                      className="flex items-center mb-2 group relative hover:bg-gray-100 p-2 rounded"
+                    >
+                      <input
+                        type="checkbox"
                         checked={task.status === "done"}
-                        indeterminate={task.status === "in-progress"}
                         onChange={() => toggleTaskStatus(task.id)}
+                        className="mr-2"
                       />
                       <span
                         className={
@@ -294,12 +304,19 @@ export default function FundraiserPage() {
                       >
                         {task.text}
                       </span>
+                      {/* Delete Button */}
+                      <button
+                        onClick={() => deleteTask(task.id)}
+                        className="absolute right-5 top-1/2 -translate-y-1/2 bg-white text-red-500 px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        x
+                      </button>
                     </li>
                   ))}
                 </ul>
               </CardContent>
             </Card>
-            ) : (
+          ) : (
             <Card className="shadow-none mb-4">
               <CardHeader>
                 <CardTitle>Donors for {selectedEvent.name}</CardTitle>
@@ -307,8 +324,11 @@ export default function FundraiserPage() {
               <CardContent>
                 <>
                   <div className="flex gap-2 mb-4">
-                    <Button onClick={() => setDonors([...donors].sort((a, b) => a.name.localeCompare(b.name)))}>Sort by Name</Button>
-                    <Button onClick={() => setDonors([...donors].sort((a, b) => a.communicationPreference.localeCompare(b.communicationPreference)))}>Sort by Preference</Button>
+                    <Button onClick={() => setDonors([...donors].sort((a, b) => a.name.localeCompare(b.name)))}>Sort by
+                      Name</Button>
+                    <Button
+                      onClick={() => setDonors([...donors].sort((a, b) => a.communicationPreference.localeCompare(b.communicationPreference)))}>Sort
+                      by Preference</Button>
                   </div>
                   <ScrollArea className="h-48">
                     <table className="w-full text-left">
