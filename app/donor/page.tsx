@@ -16,7 +16,8 @@ export default function DonorPage() {
 
   const donorId = 1; // Example donor ID (this could be dynamic based on route or prop)
 
-  // Fetch donor data when the page is mounted
+  //This is ChatGpt code. It tries to use the Donor id to fecch the donor info, but there is no Donor Id in the api so it always fails.
+  // Can you filter by user first name and last name? When I tried it, it didn't work.
   useEffect(() => {
     fetchDonorData(donorId);
   }, [donorId]);
@@ -31,6 +32,7 @@ export default function DonorPage() {
       const csvText = await response.text(); // Get the CSV data as a string
 
       // Parse the CSV data using PapaParse
+      // mock csv I fed Chatgpt. Probably need to alter the fields to match the actual csv
       Papa.parse(csvText, {
         header: true,
         skipEmptyLines: true,
@@ -183,6 +185,7 @@ export default function DonorPage() {
         </div>
       </div>
 
+      {/* right now the comment section only console logs the comments. We can use session storage or local storage to store the comments */}
       {/* Comments Section */}
       <Card className="shadow-none mt-8">
         <CardHeader>
@@ -207,4 +210,3 @@ export default function DonorPage() {
     </div>
   );
 }
-
