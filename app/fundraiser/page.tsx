@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import Papa from 'papaparse';
 import { events as defaultEventList, Event, Task } from '@/components/objects/event';
 import { DonorAPIResponse, transformDonorData } from '@/components/objects/donor';
+import Link from "next/link";
 
 export default function FundraiserPage() {
 
@@ -351,7 +352,7 @@ export default function FundraiserPage() {
                       <tbody>
                       {selectedEvent.donors.map((donor, index) => (
                         <tr key={index} className="hover:bg-gray-50">
-                          <td className="p-2 border-b">{donor.name}</td>
+                          <td className="p-2 border-b"><Link href={`/donor?name=${donor.name}`}>{donor.name}</Link></td>
                           <td className="p-2 border-b">{donor.communicationPreference}</td>
                           <td className="p-2 border-b text-center">
                             <input
