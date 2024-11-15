@@ -163,7 +163,7 @@ export default function DonorPage() {
               <CardDescription>Donor Basic Information</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 text-center">
+              <div className="space-y-2 ">
                 {/* Donor Profile Image */}
                 <img
                   src={"/defaultDonorPhoto.png"} // Using donor profile image (if available)
@@ -176,12 +176,6 @@ export default function DonorPage() {
                 <div>
                   <strong>Address:</strong> {donor.address_line1},{" "}
                   {donor.address_line2}, {donor.city}
-                </div>
-                <div>
-                  <strong>Total Donations:</strong> ${donor.total_donations}
-                </div>
-                <div>
-                  <strong>Last Gift Date:</strong> {formatTime(donor.last_gift_date)}
                 </div>
               </div>
             </CardContent>
@@ -228,6 +222,16 @@ export default function DonorPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
+                <div>
+                  <strong>Total Donations:</strong> ${donor.total_donations}
+                </div>
+                <div>
+                  <strong>Last Gift Amount:</strong> ${donor.last_gift_amount}
+                </div>
+                <div>
+                  <strong>Last Gift Date:</strong>{" "}
+                  {formatTime(donor.last_gift_date)}
+                </div>
                 <div>
                   <strong>Communication Preferences:</strong>{" "}
                   {donor.communication_preference}
