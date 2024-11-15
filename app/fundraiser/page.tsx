@@ -246,8 +246,8 @@ export default function FundraiserPage() {
               <Button variant="outline" className="mt-4" onClick={() => setView("donors")}>
                 List of Donors
               </Button>
-              <Button variant="outline" className="mt-4 ml-2" onClick={regenerateDonors}>
-                Regenerate Donor List
+              <Button variant="destructive" className="mt-4 ml-2" onClick={regenerateDonors}>
+                Reset Donor List
               </Button>
               <div className="mt-4">
                 <div className="flex items-center mt-2">
