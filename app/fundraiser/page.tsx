@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,81 +19,72 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Papa from 'papaparse';
-
+import { events as defaultEventList, Event, Task } from '@/components/objects/event';
+import { DonorAPIResponse, transformDonorData } from '@/components/objects/donor';
 
 export default function FundraiserPage() {
-  const events = [
-    {
-      id: 1,
-      name: "Event 1",
-      details: "Details for Event 1",
-      date: "2024/11/10",
-      time: "14:00:00",
-      location: "Victoria",
-      theme: "Community Outreach",
-      tasks: 14,
-      totalTasks: 20,
-      donors: 3,
-      totalDonors: 15,
-    },
-    {
-      id: 2,
-      name: "Event 2",
-      details: "Details for Event 2",
-      date: "2024/12/05",
-      time: "18:30:00",
-      location: "Vancouver",
-      theme: "Environmental Awareness",
-      tasks: 10,
-      totalTasks: 20,
-      donors: 5,
-      totalDonors: 15,
-    },
-    {
-      id: 3,
-      name: "Event 3",
-      details: "Details for Event 3",
-      date: "2024/12/20",
-      time: "09:00:00",
-      location: "Nanaimo",
-      theme: "Health and Wellness",
-      tasks: 18,
-      totalTasks: 20,
-      donors: 12,
-      totalDonors: 15,
-    },
-  ];
 
-  const [selectedEvent, setSelectedEvent] = useState(events[0]);
+  const [events, setEvents] = useState<Event[]>(defaultEventList); // Initialize with defaultEventList
+  const [selectedEvent, setSelectedEvent] = useState<Event>(defaultEventList[0]);
+
+  const [tasks, setTasks] = useState<Task[]>(selectedEvent.tasks);
+  const [newTaskText, setNewTaskText] = useState("");
   const [view, setView] = useState("tasks"); // State to toggle between tasks and donors
   const [donors, setDonors] = useState([]); // State to store donor data
-  const [loading, setLoading] = useState(false); // Loading state for fetching data
-  const [invitedCount, setInvitedCount] = useState(0); // Count of invited donors
-
+  const [, setLoading] = useState(false); // Loading state for fetching data
+  const [, setInvitedCount] = useState(
+    selectedEvent.donors.filter(donor => donor.invited).length
+  );
+  useEffect(() => {
+    // Update localStorage whenever events change
+    localStorage.setItem("events", JSON.stringify(events));
+  }, [events]);
 
   useEffect(() => {
-    if (view === "donors") {
-      fetchDonors();
+    // Access localStorage only on the client side
+    const storedEvents = localStorage.getItem("events");
+    if (storedEvents) {
+      const parsedEvents = JSON.parse(storedEvents);
+      setEvents(parsedEvents);
+      setSelectedEvent(parsedEvents[0]); // Update selectedEvent based on stored events
     }
-  }, [view, selectedEvent]);
+  }, []);
 
-  const fetchDonors = async () => {
+  const calculateInvitedCount = () => {
+    return selectedEvent.donors.filter((donor) => donor.invited).length;
+  };
+
+  useEffect(() => {
+    localStorage.setItem('events', JSON.stringify(events));
+  }, [events]);
+
+  const regenerateDonors = async () => {
     setLoading(true);
     const location = selectedEvent.location;
     const url = `https://bc-cancer-faux.onrender.com/event?cities=${location}&format=csv`;
+
     try {
       const response = await fetch(url);
       const csvText = await response.text();
+
       Papa.parse(csvText, {
         header: true,
         skipEmptyLines: true,
-        complete: (result: { data: boolean[]; }) => {
-          const donorData = result.data.map(donor => ({
-            name: `${donor.first_name} ${donor.last_name}`,
-            communicationPreference: donor.communication_preference,
-            invited: false, // Default unchecked
-          }));
-          setDonors(donorData);
+        complete: (result: { data: DonorAPIResponse[] }) => {
+          const donorData = transformDonorData(result.data);
+
+          // Update donors for the selected event
+          const updatedEvent = { ...selectedEvent, donors: donorData };
+          setSelectedEvent(updatedEvent);
+
+          const updatedEvents = events.map(event =>
+            event.id === updatedEvent.id ? updatedEvent : event
+          );
+          setEvents(updatedEvents);
+
+          // Update invited count
+          const initialInvitedCount = donorData.filter(donor => donor.invited).length;
+          setInvitedCount(initialInvitedCount);
         },
       });
     } catch (error) {
@@ -103,77 +94,89 @@ export default function FundraiserPage() {
     }
   };
 
-  const toggleInvitation = (index) => {
-    setDonors(prevDonors => {
-      const updatedDonors = prevDonors.map((donor, i) =>
-        i === index ? { ...donor, invited: !donor.invited } : donor
-      );
-      const newInvitedCount = updatedDonors.filter(donor => donor.invited).length;
-      setInvitedCount(newInvitedCount);
-      return updatedDonors;
-    });
+  useEffect(() => {
+    if (!selectedEvent.donors || selectedEvent.donors.length === 0) {
+      regenerateDonors(); // Fetch only if no donors exist
+    }
+  }, [selectedEvent]);
+
+
+
+// Toggle invitation status of a donor within the selected event
+  const toggleInvitation = (index: number) => {
+    const updatedDonors = selectedEvent.donors.map((donor, i) =>
+      i === index ? { ...donor, invited: !donor.invited } : donor
+    );
+
+    // Update selectedEvent with the new donors array
+    const updatedEvent = { ...selectedEvent, donors: updatedDonors };
+    setSelectedEvent(updatedEvent);
+
+    // Reflect changes in the global events array
+    const updatedEvents = events.map((event) =>
+      event.id === updatedEvent.id ? updatedEvent : event
+    );
+    setEvents(updatedEvents);
   };
 
 
-  const [tasks, setTasks] = useState([
-    { id: 1, text: "undone task1", status: "undone" },
-    { id: 2, text: "undone task2", status: "undone" },
-    { id: 3, text: "in progress task1", status: "in progress" },
-    { id: 4, text: "task done1", status: "done" },
-  ]);
-  const [newTaskText, setNewTaskText] = useState("");
+  useEffect(() => {
+    setTasks(selectedEvent.tasks);
+  }, [selectedEvent]);
 
+// Update the events array to reflect changes to selectedEvent tasks
+  const updateEventTasks = (updatedTasks: Task[]) => {
+    const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
+    setSelectedEvent(updatedEvent);
+
+    const updatedEvents = events.map(event =>
+      event.id === updatedEvent.id ? updatedEvent : event
+    );
+    setEvents(updatedEvents);
+  };
+
+// Function to add a new task to the selected event
   const handleAddTask = () => {
     if (newTaskText.trim()) {
-      setTasks([...tasks, { id: Date.now(), text: newTaskText, status: "undone" }]);
+      const newTask: Task = { id: Date.now(), text: newTaskText, status: "undone" as const };
+      const updatedTasks = [...tasks, newTask];
+      updateEventTasks(updatedTasks);
       setNewTaskText("");
     }
   };
 
-  // Function to toggle task status
-  const toggleTaskStatus = (taskId) => {
-    setTasks(tasks.map(task => {
+// Toggle task status within the selected event
+  const toggleTaskStatus = (taskId: number) => {
+    const updatedTasks = tasks.map(task => {
       if (task.id === taskId) {
-        const newStatus = task.status === "undone"
-          ? "done"
-          : task.status === "done"
+        const newStatus: "undone" | "in-progress" | "done" =
+          task.status === "undone"
             ? "in-progress"
-            : "undone";
+            : task.status === "in-progress"
+              ? "done"
+              : "undone";
         return { ...task, status: newStatus };
       }
       return task;
-    }));
+    });
+    updateEventTasks(updatedTasks);
   };
 
+// Function to delete a task
+  const deleteTask = (taskId: number) => {
+    const updatedTasks = tasks.filter(task => task.id !== taskId);
+    updateEventTasks(updatedTasks);
+  };
+
+// Function to calculate task completion progress
   const calculateProgress = () => {
     const doneTasks = tasks.filter(task => task.status === "done").length;
     return (doneTasks / tasks.length) * 100;
   };
 
-  function CustomCheckbox({ checked, indeterminate, onChange }) {
-    const checkboxRef = useRef(null);
 
-    useEffect(() => {
-      if (!checkboxRef.current) {
-        return;
-      }
-      checkboxRef.current.indeterminate = indeterminate;
-    }, [indeterminate]);
 
-    return (
-      <input
-        type="checkbox"
-        ref={checkboxRef}
-        checked={checked}
-        onChange={onChange}
-        className="mr-2"
-      />
-    );
-  }
 
-  const deleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
-  };
 
   return (
     <div className="flex mt-32 mx-auto max-w-6xl flex-col gap-8">
@@ -242,15 +245,19 @@ export default function FundraiserPage() {
               <Button variant="outline" className="mt-4" onClick={() => setView("donors")}>
                 List of Donors
               </Button>
-              <div className="mt-4 flex items-center mt-2">
-
+              <Button variant="outline" className="mt-4 ml-2" onClick={regenerateDonors}>
+                Regenerate Donor List
+              </Button>
+              <div className="mt-4">
+                <div className="flex items-center mt-2">
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
                     <div
                       className="bg-blue-500 h-2.5 rounded-full"
-                      style={{width: `${(invitedCount / donors.length) * 100}%`}}
+                      style={{width: `${calculateInvitedCount()}/{selectedEvent.donorTarget}}%`}}
                     ></div>
                   </div>
-                  <span className="ml-2">{invitedCount}/{donors.length}</span>
+                  <span className="ml-2">{calculateInvitedCount()}/{selectedEvent.donorTarget}</span>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -314,6 +321,8 @@ export default function FundraiserPage() {
                     </li>
                   ))}
                 </ul>
+
+
               </CardContent>
             </Card>
           ) : (
@@ -333,18 +342,18 @@ export default function FundraiserPage() {
                   <ScrollArea className="h-48">
                     <table className="w-full text-left">
                       <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Communication Preference</th>
-                        <th>Invited</th>
+                      <tr className="bg-gray-100">
+                        <th className="p-2 border-b font-semibold">Name</th>
+                        <th className="p-2 border-b font-semibold">Communication Preference</th>
+                        <th className="p-2 border-b font-semibold text-center">Invited</th>
                       </tr>
                       </thead>
                       <tbody>
-                      {donors.map((donor, index) => (
-                        <tr key={index}>
-                          <td>{donor.name}</td>
-                          <td>{donor.communicationPreference}</td>
-                          <td>
+                      {selectedEvent.donors.map((donor, index) => (
+                        <tr key={index} className="hover:bg-gray-50">
+                          <td className="p-2 border-b">{donor.name}</td>
+                          <td className="p-2 border-b">{donor.communicationPreference}</td>
+                          <td className="p-2 border-b text-center">
                             <input
                               type="checkbox"
                               checked={donor.invited}
@@ -355,7 +364,9 @@ export default function FundraiserPage() {
                       ))}
                       </tbody>
                     </table>
+
                   </ScrollArea>
+
                 </>
               </CardContent>
             </Card>
