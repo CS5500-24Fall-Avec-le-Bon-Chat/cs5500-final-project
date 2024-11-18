@@ -177,8 +177,19 @@ export default function DonorPage() {
               </div>
             </CardContent>
           </Card>
+          <div>
+          {/*add a button to navigate back to the fundraiser page */}
+          <Button
+            className="mt-2 w-full"
+            variant="outline"
+            onClick={() => {
+              window.location.href = "/fundraiser";
+            }}>
+              Back to Fundraiser Page
+              </Button>
         </div>
-
+        </div>
+        
         {/* Donor Donation History Column (Always visible) */}
         {/*<div className="w-1/3">*/}
         {/*  <Card className="shadow-none">*/}
