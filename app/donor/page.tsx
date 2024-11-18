@@ -23,6 +23,7 @@ import { GetDonors } from "@/lib/api/donor";
 import { useSearchParams } from "next/navigation";
 import { IDonor } from "@/lib/type/donor";
 import {formatTime} from "@/lib/utils";
+import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
 
 export default function DonorPage() {
   const params = useSearchParams();
@@ -136,6 +137,9 @@ export default function DonorPage() {
 
   return (
     <div className="flex justify-center mt-32 mx-auto w-3/4 max-w-2xl flex-col gap-8">
+      <>
+      <FontSizeAndTheme/>
+      </>
       {/* Breadcrumb Navigation */}
       <Breadcrumb>
         <BreadcrumbList>
@@ -144,7 +148,7 @@ export default function DonorPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/staff">Staff</BreadcrumbLink>
+            <BreadcrumbLink href="/staff">Friends</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbPage>Donor</BreadcrumbPage>

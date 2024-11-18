@@ -22,6 +22,7 @@ import Papa from 'papaparse';
 import { events as defaultEventList, Event, Task } from '@/components/objects/event';
 import { DonorAPIResponse, transformDonorData } from '@/components/objects/donor';
 import Link from "next/link";
+import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
 
 export default function FundraiserPage() {
 
@@ -175,12 +176,11 @@ export default function FundraiserPage() {
     return (doneTasks / tasks.length) * 100;
   };
 
-
-
-
-
   return (
     <div className="flex mt-32 mx-auto max-w-6xl flex-col gap-8">
+      <>
+      <FontSizeAndTheme />
+      </>
       {/* Breadcrumb Navigation */}
       <Breadcrumb>
         <BreadcrumbList>
