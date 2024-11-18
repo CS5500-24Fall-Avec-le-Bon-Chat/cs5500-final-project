@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -39,7 +39,6 @@ export default function FundraiserPage() {
   const [tasks, setTasks] = useState<Task[]>(selectedEvent.tasks);
   const [newTaskText, setNewTaskText] = useState("");
   const [view, setView] = useState("tasks"); // State to toggle between tasks and donors
-  const [donors, setDonors] = useState([]); // State to store donor data
   const [, setLoading] = useState(false); // Loading state for fetching data
   const [, setInvitedCount] = useState(
     selectedEvent.donors.filter((donor) => donor.invited).length,
@@ -62,9 +61,9 @@ export default function FundraiserPage() {
     }
   }, []);
 
-  const calculateInvitedCount = () => {
+  const calculateInvitedCount = useCallback(() => {
     return selectedEvent.donors.filter((donor) => donor.invited).length;
-  };
+  }, [selectedEvent]);
 
   useEffect(() => {
     localStorage.setItem("events", JSON.stringify(events));
@@ -164,12 +163,8 @@ export default function FundraiserPage() {
   const toggleTaskStatus = (taskId: number) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
-        const newStatus: "undone" | "in-progress" | "done" =
-          task.status === "undone"
-            ? "in-progress"
-            : task.status === "in-progress"
-              ? "done"
-              : "undone";
+        const newStatus: "undone" | "done" =
+          task.status === "undone" ? "done" : "undone";
         return { ...task, status: newStatus };
       }
       return task;
@@ -290,12 +285,12 @@ export default function FundraiserPage() {
                     <div
                       className="bg-blue-500 h-2.5 rounded-full"
                       style={{
-                        width: `${calculateInvitedCount()}/{selectedEvent.donorTarget}}%`,
+                        width: `${(calculateInvitedCount() / selectedEvent.donors.length) * 100 || 0}%`,
                       }}
                     ></div>
                   </div>
                   <span className="ml-2">
-                    {calculateInvitedCount()}/{selectedEvent.donorTarget}
+                    {calculateInvitedCount()}/{selectedEvent.donors.length}
                   </span>
                 </div>
               </div>
@@ -374,30 +369,34 @@ export default function FundraiserPage() {
                   <div className="flex gap-2 mb-4">
                     <Button
                       onClick={() =>
-                        setDonors(
-                          [...donors].sort((a, b) =>
-                            a.name.localeCompare(b.name),
-                          ),
-                        )
+                        setSelectedEvent((prev) => {
+                          const donors = prev.donors.sort((a, b) =>
+                            a.name.localeCompare(b.name, "zh-Hans", {
+                              sensitivity: "base",
+                            }),
+                          );
+                          return { ...prev, donors };
+                        })
                       }
                     >
                       Sort by Name
                     </Button>
                     <Button
                       onClick={() =>
-                        setDonors(
-                          [...donors].sort((a, b) =>
+                        setSelectedEvent((prev) => {
+                          const donors = prev.donors.sort((a, b) =>
                             a.communicationPreference.localeCompare(
                               b.communicationPreference,
                             ),
-                          ),
-                        )
+                          );
+                          return { ...prev, donors };
+                        })
                       }
                     >
                       Sort by Preference
                     </Button>
                   </div>
-                  <ScrollArea className="h-48">
+                  <ScrollArea className="">
                     <table className="w-full text-left">
                       <thead>
                         <tr className="bg-gray-100">
