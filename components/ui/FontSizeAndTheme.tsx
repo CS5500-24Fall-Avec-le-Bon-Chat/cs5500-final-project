@@ -25,7 +25,7 @@ export default function FontSizeAndTheme() {
   }, [theme]);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 1000 }}>
       <span style={{ marginRight: '20px' }}>Font Size</span>
       <label style={{ marginRight: '20px' }}>
         <input
