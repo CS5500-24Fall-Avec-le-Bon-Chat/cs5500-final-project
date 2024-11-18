@@ -18,15 +18,23 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Papa from 'papaparse';
-import { events as defaultEventList, Event, Task } from '@/components/objects/event';
-import { DonorAPIResponse, transformDonorData } from '@/components/objects/donor';
+import Papa from "papaparse";
+import {
+  events as defaultEventList,
+  Event,
+  Task,
+} from "@/components/objects/event";
+import {
+  DonorAPIResponse,
+  transformDonorData,
+} from "@/components/objects/donor";
 import Link from "next/link";
 
 export default function FundraiserPage() {
-
   const [events, setEvents] = useState<Event[]>(defaultEventList); // Initialize with defaultEventList
-  const [selectedEvent, setSelectedEvent] = useState<Event>(defaultEventList[0]);
+  const [selectedEvent, setSelectedEvent] = useState<Event>(
+    defaultEventList[0],
+  );
 
   const [tasks, setTasks] = useState<Task[]>(selectedEvent.tasks);
   const [newTaskText, setNewTaskText] = useState("");
@@ -34,8 +42,10 @@ export default function FundraiserPage() {
   const [donors, setDonors] = useState([]); // State to store donor data
   const [, setLoading] = useState(false); // Loading state for fetching data
   const [, setInvitedCount] = useState(
-    selectedEvent.donors.filter(donor => donor.invited).length
+    selectedEvent.donors.filter((donor) => donor.invited).length,
   );
+  const [username, setUsername] = useState("");
+
   useEffect(() => {
     // Update localStorage whenever events change
     localStorage.setItem("events", JSON.stringify(events));
@@ -43,6 +53,7 @@ export default function FundraiserPage() {
 
   useEffect(() => {
     // Access localStorage only on the client side
+    setUsername(localStorage.getItem("username") || "");
     const storedEvents = localStorage.getItem("events");
     if (storedEvents) {
       const parsedEvents = JSON.parse(storedEvents);
@@ -56,7 +67,7 @@ export default function FundraiserPage() {
   };
 
   useEffect(() => {
-    localStorage.setItem('events', JSON.stringify(events));
+    localStorage.setItem("events", JSON.stringify(events));
   }, [events]);
 
   const regenerateDonors = async () => {
@@ -78,13 +89,15 @@ export default function FundraiserPage() {
           const updatedEvent = { ...selectedEvent, donors: donorData };
           setSelectedEvent(updatedEvent);
 
-          const updatedEvents = events.map(event =>
-            event.id === updatedEvent.id ? updatedEvent : event
+          const updatedEvents = events.map((event) =>
+            event.id === updatedEvent.id ? updatedEvent : event,
           );
           setEvents(updatedEvents);
 
           // Update invited count
-          const initialInvitedCount = donorData.filter(donor => donor.invited).length;
+          const initialInvitedCount = donorData.filter(
+            (donor) => donor.invited,
+          ).length;
           setInvitedCount(initialInvitedCount);
         },
       });
@@ -101,12 +114,10 @@ export default function FundraiserPage() {
     }
   }, [selectedEvent]);
 
-
-
-// Toggle invitation status of a donor within the selected event
+  // Toggle invitation status of a donor within the selected event
   const toggleInvitation = (index: number) => {
     const updatedDonors = selectedEvent.donors.map((donor, i) =>
-      i === index ? { ...donor, invited: !donor.invited } : donor
+      i === index ? { ...donor, invited: !donor.invited } : donor,
     );
 
     // Update selectedEvent with the new donors array
@@ -115,40 +126,43 @@ export default function FundraiserPage() {
 
     // Reflect changes in the global events array
     const updatedEvents = events.map((event) =>
-      event.id === updatedEvent.id ? updatedEvent : event
+      event.id === updatedEvent.id ? updatedEvent : event,
     );
     setEvents(updatedEvents);
   };
-
 
   useEffect(() => {
     setTasks(selectedEvent.tasks);
   }, [selectedEvent]);
 
-// Update the events array to reflect changes to selectedEvent tasks
+  // Update the events array to reflect changes to selectedEvent tasks
   const updateEventTasks = (updatedTasks: Task[]) => {
     const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
     setSelectedEvent(updatedEvent);
 
-    const updatedEvents = events.map(event =>
-      event.id === updatedEvent.id ? updatedEvent : event
+    const updatedEvents = events.map((event) =>
+      event.id === updatedEvent.id ? updatedEvent : event,
     );
     setEvents(updatedEvents);
   };
 
-// Function to add a new task to the selected event
+  // Function to add a new task to the selected event
   const handleAddTask = () => {
     if (newTaskText.trim()) {
-      const newTask: Task = { id: Date.now(), text: newTaskText, status: "undone" as const };
+      const newTask: Task = {
+        id: Date.now(),
+        text: newTaskText,
+        status: "undone" as const,
+      };
       const updatedTasks = [...tasks, newTask];
       updateEventTasks(updatedTasks);
       setNewTaskText("");
     }
   };
 
-// Toggle task status within the selected event
+  // Toggle task status within the selected event
   const toggleTaskStatus = (taskId: number) => {
-    const updatedTasks = tasks.map(task => {
+    const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
         const newStatus: "undone" | "in-progress" | "done" =
           task.status === "undone"
@@ -163,39 +177,37 @@ export default function FundraiserPage() {
     updateEventTasks(updatedTasks);
   };
 
-// Function to delete a task
+  // Function to delete a task
   const deleteTask = (taskId: number) => {
-    const updatedTasks = tasks.filter(task => task.id !== taskId);
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
     updateEventTasks(updatedTasks);
   };
 
-// Function to calculate task completion progress
+  // Function to calculate task completion progress
   const calculateProgress = () => {
-    const doneTasks = tasks.filter(task => task.status === "done").length;
+    const doneTasks = tasks.filter((task) => task.status === "done").length;
     return (doneTasks / tasks.length) * 100;
   };
-
-
-
-
 
   return (
     <div className="flex mt-32 mx-auto max-w-6xl flex-col gap-8">
       {/* Breadcrumb Navigation */}
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/staff">Staff</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbPage>Fundraiser</BreadcrumbPage>
-        </BreadcrumbList>
-      </Breadcrumb>
-
+      <div className="flex justify-between items-center px-5">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/staff">Staff</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbPage>Fundraiser</BreadcrumbPage>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="text-sm">Welcome, {username}!</div>
+      </div>
       {/* Main Content */}
       <div className="flex">
         {/* Event List Column */}
@@ -223,12 +235,24 @@ export default function FundraiserPage() {
               <CardDescription>{selectedEvent.details}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p><strong>Date:</strong> {selectedEvent.date}</p>
-              <p><strong>Time:</strong> {selectedEvent.time}</p>
-              <p><strong>Location:</strong> {selectedEvent.location}</p>
-              <p><strong>Theme:</strong> {selectedEvent.theme}</p>
+              <p>
+                <strong>Date:</strong> {selectedEvent.date}
+              </p>
+              <p>
+                <strong>Time:</strong> {selectedEvent.time}
+              </p>
+              <p>
+                <strong>Location:</strong> {selectedEvent.location}
+              </p>
+              <p>
+                <strong>Theme:</strong> {selectedEvent.theme}
+              </p>
 
-              <Button variant="outline" className="mt-4" onClick={() => setView("tasks")}>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => setView("tasks")}
+              >
                 List of Tasks
               </Button>
               <div className="mt-4">
@@ -236,17 +260,28 @@ export default function FundraiserPage() {
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
                     <div
                       className="bg-green-500 h-2.5 rounded-full"
-                      style={{width: `${calculateProgress()}%`}}
+                      style={{ width: `${calculateProgress()}%` }}
                     ></div>
                   </div>
-                  <span className="ml-2">{tasks.filter(task => task.status === "done").length}/{tasks.length}</span>
+                  <span className="ml-2">
+                    {tasks.filter((task) => task.status === "done").length}/
+                    {tasks.length}
+                  </span>
                 </div>
               </div>
 
-              <Button variant="outline" className="mt-4" onClick={() => setView("donors")}>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => setView("donors")}
+              >
                 List of Donors
               </Button>
-              <Button variant="destructive" className="mt-4 ml-2" onClick={regenerateDonors}>
+              <Button
+                variant="destructive"
+                className="mt-4 ml-2"
+                onClick={regenerateDonors}
+              >
                 Reset Donor List
               </Button>
               <div className="mt-4">
@@ -254,10 +289,14 @@ export default function FundraiserPage() {
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
                     <div
                       className="bg-blue-500 h-2.5 rounded-full"
-                      style={{width: `${calculateInvitedCount()}/{selectedEvent.donorTarget}}%`}}
+                      style={{
+                        width: `${calculateInvitedCount()}/{selectedEvent.donorTarget}}%`,
+                      }}
                     ></div>
                   </div>
-                  <span className="ml-2">{calculateInvitedCount()}/{selectedEvent.donorTarget}</span>
+                  <span className="ml-2">
+                    {calculateInvitedCount()}/{selectedEvent.donorTarget}
+                  </span>
                 </div>
               </div>
             </CardContent>
@@ -267,7 +306,6 @@ export default function FundraiserPage() {
         {/* List of Tasks or List of Donors Column */}
         <div className="w-5/12 p-4">
           {view === "tasks" ? (
-
             <Card className="shadow-none mb-4">
               <CardHeader>
                 <CardTitle>Tasks for {selectedEvent.name}</CardTitle>
@@ -286,7 +324,9 @@ export default function FundraiserPage() {
                     }}
                     className="mr-2"
                   />
-                  <Button variant="outline" onClick={handleAddTask}>Add</Button>
+                  <Button variant="outline" onClick={handleAddTask}>
+                    Add
+                  </Button>
                 </div>
 
                 <ul>
@@ -322,8 +362,6 @@ export default function FundraiserPage() {
                     </li>
                   ))}
                 </ul>
-
-
               </CardContent>
             </Card>
           ) : (
@@ -334,40 +372,67 @@ export default function FundraiserPage() {
               <CardContent>
                 <>
                   <div className="flex gap-2 mb-4">
-                    <Button onClick={() => setDonors([...donors].sort((a, b) => a.name.localeCompare(b.name)))}>Sort by
-                      Name</Button>
                     <Button
-                      onClick={() => setDonors([...donors].sort((a, b) => a.communicationPreference.localeCompare(b.communicationPreference)))}>Sort
-                      by Preference</Button>
+                      onClick={() =>
+                        setDonors(
+                          [...donors].sort((a, b) =>
+                            a.name.localeCompare(b.name),
+                          ),
+                        )
+                      }
+                    >
+                      Sort by Name
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        setDonors(
+                          [...donors].sort((a, b) =>
+                            a.communicationPreference.localeCompare(
+                              b.communicationPreference,
+                            ),
+                          ),
+                        )
+                      }
+                    >
+                      Sort by Preference
+                    </Button>
                   </div>
                   <ScrollArea className="h-48">
                     <table className="w-full text-left">
                       <thead>
-                      <tr className="bg-gray-100">
-                        <th className="p-2 border-b font-semibold">Name</th>
-                        <th className="p-2 border-b font-semibold">Communication Preference</th>
-                        <th className="p-2 border-b font-semibold text-center">Invited</th>
-                      </tr>
+                        <tr className="bg-gray-100">
+                          <th className="p-2 border-b font-semibold">Name</th>
+                          <th className="p-2 border-b font-semibold">
+                            Communication Preference
+                          </th>
+                          <th className="p-2 border-b font-semibold text-center">
+                            Invited
+                          </th>
+                        </tr>
                       </thead>
                       <tbody>
-                      {selectedEvent.donors.map((donor, index) => (
-                        <tr key={index} className="hover:bg-gray-50">
-                          <td className="p-2 border-b"><Link href={`/donor?name=${donor.name}`}>{donor.name}</Link></td>
-                          <td className="p-2 border-b">{donor.communicationPreference}</td>
-                          <td className="p-2 border-b text-center">
-                            <input
-                              type="checkbox"
-                              checked={donor.invited}
-                              onChange={() => toggleInvitation(index)}
-                            />
-                          </td>
-                        </tr>
-                      ))}
+                        {selectedEvent.donors.map((donor, index) => (
+                          <tr key={index} className="hover:bg-gray-50">
+                            <td className="p-2 border-b">
+                              <Link href={`/donor?name=${donor.name}`}>
+                                {donor.name}
+                              </Link>
+                            </td>
+                            <td className="p-2 border-b">
+                              {donor.communicationPreference}
+                            </td>
+                            <td className="p-2 border-b text-center">
+                              <input
+                                type="checkbox"
+                                checked={donor.invited}
+                                onChange={() => toggleInvitation(index)}
+                              />
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
-
                   </ScrollArea>
-
                 </>
               </CardContent>
             </Card>

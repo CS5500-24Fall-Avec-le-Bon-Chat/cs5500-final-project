@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Papa from "papaparse"; // For parsing CSV data
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/text-area";
 import {
@@ -22,17 +21,21 @@ import {
 import { GetDonors } from "@/lib/api/donor";
 import { useSearchParams } from "next/navigation";
 import { IDonor } from "@/lib/type/donor";
-import {formatTime} from "@/lib/utils";
+import { formatTime } from "@/lib/utils";
 
 export default function DonorPage() {
   const params = useSearchParams();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [donor, setDonor] = useState<IDonor>(); // Store donor data
-  const [loading, setLoading] = useState(false); // Loading state for data fetching
+  const [loading, setLoading] = useState(true); // Loading state for data fetching
   const [commentsInput, setCommentsInput] = useState(""); // Store comments input
   const [comments, setComments] = useState<string[]>([]); // Store comments
-  const [view, setView] = useState("basic"); // Toggle between basic and detailed view
+  const [username, setUsername] = useState(""); // Toggle between basic and detailed view
+
+  useEffect(() => {
+    setUsername(localStorage.getItem("username") || "");
+  }, []);
 
   useEffect(() => {
     const name = decodeURIComponent(params.get("name")!);
@@ -102,55 +105,46 @@ export default function DonorPage() {
 
   const fetchComments = () => {
     const lsComments = JSON.parse(localStorage.getItem("comments") || "{}");
-    const donorComments =
-      lsComments[`${firstName} ${lastName}`] || [];
+    const donorComments = lsComments[`${firstName} ${lastName}`] || [];
     setComments(donorComments);
-    console.log("*****")
-    console.log(donorComments)
   };
 
   // Handle comments submission (just logs it to the console)
   const handleSubmitComment = () => {
     const lsComments = JSON.parse(localStorage.getItem("comments") || "{}");
-    const donorComments =
-      lsComments[`${firstName} ${lastName}`] || [];
+    const donorComments = lsComments[`${firstName} ${lastName}`] || [];
     const newComments = {
       ...lsComments,
-      [`${firstName} ${lastName}`]: [
-        ...donorComments,
-        commentsInput,
-      ],
+      [`${firstName} ${lastName}`]: [...donorComments, commentsInput],
     };
     localStorage.setItem("comments", JSON.stringify(newComments));
     setCommentsInput(""); // Clear the comments input after submission
     fetchComments();
   };
 
-  if (loading) {
+  if (loading || !donor) {
     return <div>Loading...</div>; // Show loading indicator while data is being fetched
-  }
-
-  if (!donor) {
-    return <div>No donor data available</div>; // Handle the case where no donor data is found
   }
 
   return (
     <div className="flex justify-center mt-32 mx-auto w-3/4 max-w-2xl flex-col gap-8">
       {/* Breadcrumb Navigation */}
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/staff">Staff</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbPage>Donor</BreadcrumbPage>
-        </BreadcrumbList>
-      </Breadcrumb>
-
+      <div className="flex justify-between items-center px-5">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/staff">Staff</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbPage>Donor</BreadcrumbPage>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="text-sm">Welcome, {username}!</div>
+      </div>
       {/* Main Content */}
       <div className="flex gap-8">
         {/* Donor Basic Info Column */}
