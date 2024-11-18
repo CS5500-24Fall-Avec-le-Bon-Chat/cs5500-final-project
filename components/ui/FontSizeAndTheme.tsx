@@ -1,15 +1,27 @@
 import { useState, useEffect } from 'react';
 
 export default function FontSizeAndTheme() {
-  const [fontSize, setFontSize] = useState('medium');
-  const [theme, setTheme] = useState('default');
+
+  // Retrieve the saved font size and theme from local storage or default values
+  const savedFontSize = localStorage.getItem('fontSize') || 'medium';
+  const savedTheme = localStorage.getItem('theme') || 'default';
+
+
+  const [fontSize, setFontSize] = useState(savedFontSize);
+  const [theme, setTheme] = useState(savedTheme);
 
   useEffect(() => {
+    // Apply the font size to the document body
     document.body.style.fontSize = `var(--font-size-${fontSize})`;
+    // Save the font size to local storage
+    localStorage.setItem('fontSize', fontSize);
   }, [fontSize]);
 
   useEffect(() => {
+    // Apply the theme to the document body
     document.body.className = theme === 'wheat' ? 'theme-wheat' : theme === 'light-green' ? 'theme-light-green' : '';
+    // Save the theme to local storage
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   return (
