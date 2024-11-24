@@ -9,15 +9,6 @@ import {
 } from "../types/user.types";
 import bcrypt from "bcrypt";
 
-// work flow:
-// 1. create a new user and assign a role
-// 2. create a new event and assign a fundraiser. Only a coordinator can create an event.
-// 3. pull donors from Juancho's api and store them in the database. Assign a fundraiser to each donor.
-// 4. create a eventAttendee and assign a donor to an event simultaneously.
-// 5. when a donor donates, update the donor's total donation amount and the event's total donation amount.
-// 6. when attendee list changes, update the eventAttendee table.
-// 7. make a comment on a donor's profile. Only a fundraiser can make a comment.
-
 const prisma = new PrismaClient();
 
 export class UserService {
