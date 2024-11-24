@@ -24,6 +24,42 @@ Every folder under `/app` is a route segment, meaning that `/app/foo/bar` will r
 
 `/public` is where all the static files are stored. This includes images, fonts, etc.
 
+`/server` is the server part of the project, built with Node.js, Express, and Prisma. It provides APIs for managing users, events, donors, comments, and event attendees.
+
+## Backend SetUp
+#### Work Flow
+1. create a new user and assign a role
+2. create a new event. Only a coordinator can create an event.
+3. create a new eventFundraiser to assign fundraisers to the event.
+4. pull donors from Juancho's api and store them in the database. Assign a fundraiser to each donor. (Assuming the donor name will always be unique.)
+5. create a eventAttendee and assign a donor to an event simultaneously.
+6. when a donor donates, update the donor's total donation amount and the event's total donation amount.
+7. when attendee list changes, update the eventAttendee table.
+8. make a comment on a donor's profile. Only a fundraiser can make a comment.
+
+#### Environment Variables
+Create a .env file in the root directory and add the following environment variables:
+```
+DATABASE_URL="DATABASE_URL=mysql://DB_USER:DB_PASSWORD@localhost:3306/YOUR_DATABASE_NAME"
+```
+
+#### Database Setup
+Validate the Prisma schema:
+```
+npx prisma validate
+```
+
+Generate the Prisma client:
+```
+npx prisma generate
+```
+
+Apply the migrations to your database:
+```
+npx prisma migrate dev --name init
+```
+
+
 ## UI Framework
 This project uses shadcn as UI framework. You can find the documentation [here](https://shadcn.com/docs/getting-started/introduction).
 
