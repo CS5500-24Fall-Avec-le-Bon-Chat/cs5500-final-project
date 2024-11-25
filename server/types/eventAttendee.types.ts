@@ -18,9 +18,8 @@ export interface GetEventAttendeeIdParams {
     donorId: number;
 }
 
-export interface DeleteEventAttendeeParams {
+export interface DeleteEventAttendeeByEventIdParams {
     eventId: number;
-    donorId: number;
 }
 
 export interface PatchEventAttendeeParams {
