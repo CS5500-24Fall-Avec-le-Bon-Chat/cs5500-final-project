@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { CreateEventFundraiserParams, DeleteEventFundraiserParams, getEventFundraiserByIdParams, GetEventFundraiserIdParams, GetEventFundraisersFilterParams } from "../types/eventFundraiser.types";
+import { CreateEventFundraiserParams, DeleteEventFundraiserParams, getEventFundraiserByIdParams, GetEventFundraiserIdParams, GetEventFundraisersFilterParams } from "@/server/types/eventFundraiser.types";
 
 const prisma = new PrismaClient();
 

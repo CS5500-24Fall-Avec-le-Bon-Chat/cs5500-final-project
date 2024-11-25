@@ -5,7 +5,7 @@ import {
     GetEventByIdParams, 
     GetEventsFilterParams, 
     PatchEventParams 
-} from "../types/event.types";
+} from "@/server/types/event.types";
 
 const prisma = new PrismaClient();
 

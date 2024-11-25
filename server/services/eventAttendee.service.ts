@@ -7,7 +7,7 @@ import {
     GetEventAttendeeByFilterParams,
     GetEventAttendeeIdParams,
     PatchEventAttendeeParams
-} from "../types/eventAttendee.types";
+} from "@/server/types/eventAttendee.types";
 
 
 const prisma = new PrismaClient();

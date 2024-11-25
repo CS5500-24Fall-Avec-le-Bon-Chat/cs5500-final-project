@@ -1,6 +1,7 @@
 datasource db {
   provider = "mysql"
   url = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
   
 generator client {
@@ -10,7 +11,7 @@ generator client {
 model User {
   id         Int @id @default (autoincrement())
   name      String @db.VarChar(255)
-  password  String @db.VarChar(255)
+  // password  String @db.VarChar(255)
   role      Role @default (FUNDRAISER)
   holdEvents  EventFundraiser[] @relation("UserEvents")
   donors    Donor[] @relation("UserDonors")
@@ -47,7 +48,7 @@ model EventAttendee {
   eventId   Int
   donor     Donor @relation(fields: [donorId], references: [id])
   donorId   Int
-  amount    Float @default(0)
+  amount    Float @default(0) // amount donated
 }
 
 model EventFundraiser {
@@ -82,57 +83,14 @@ enum ReasonType {
   OTHER
 }
 enum City {
-  ABBOTSFORD
-  ARMSTRONG
-  BURNABY
-  CAMPBELL_RIVER
-  CASTLEGAR
-  CHILLIWACK
-  COLWOOD
-  COQUITLAM
-  COURTENAY
-  CRANBROOK
-  DAWSON_CREEK
-  DELTA
-  DUNCAN
-  ENDERBY
-  FERNIE
-  FORT_ST_JOHN
-  GRAND_FORKS
-  GREENWOOD
-  KAMLOOPS
-  KELOWNA
-  KIMBERLEY
-  LANGFORD
-  LANGLEY
-  MAPLE_RIDGE
-  MERRITT
-  MISSION
-  NANAIMO
-  NELSON
-  NEW_WESTMINSTER
-  NORTH_VANCOUVER
-  PARKSVILLE
-  PENTICTON
-  PITT_MEADOWS
-  PORT_ALBERNI
-  PORT_COQUITLAM
-  PORT_MOODY
-  POWELL_RIVER
-  PRINCE_GEORGE
-  PRINCE_RUPERT
-  QUESNEL
-  REVELSTOKE
-  RICHMOND
-  ROSSLAND
-  SALMON_ARM
-  SURREY
-  TERRACE
-  TRAIL
-  VANCOUVER
-  VERNON
   VICTORIA
-  WEST_KELOWNA
-  WEST_VANCOUVER
-  WHITE_ROCK
+  NANAIMO
+  COURTENAY
+  PARKSVILLE
+  CAMPBELL_RIVER
+  SAANICH
+  VANCOUVER
+  SURREY
+  BURNABY
+  RICHMOND
 }

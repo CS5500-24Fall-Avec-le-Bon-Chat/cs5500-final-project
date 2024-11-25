@@ -4,7 +4,7 @@ import {
     GetDonorByFundraiserParams,
     GetDonorParams,
     PatchDonorParams
- } from "../types/donor.types";
+ } from "@/server/types/donor.types";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -69,7 +69,7 @@ export class DonorService {
     }
 
     static async getDonors() {
-        return await prisma.donor.findMany();
+        return prisma.donor.findMany();
     }
 
     // Get a donor by id or name
