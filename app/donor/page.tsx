@@ -22,8 +22,6 @@ import { GetDonors } from "@/lib/api/donor.api";
 import { useSearchParams } from "next/navigation";
 import { IDonor } from "@/types/donor.types";
 import { formatTime } from "@/lib/utils";
-
-import {formatTime} from "@/lib/utils";
 import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
 export default function DonorPage() {
   const params = useSearchParams();
