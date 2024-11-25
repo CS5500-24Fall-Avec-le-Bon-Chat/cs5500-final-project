@@ -9,8 +9,8 @@
     "lint": "next lint",
     "test": "jest",
     "seed": "prisma db seed",
-    "migrate": "prisma migrate dev --schema=server/prisma/schema.prisma",
-    "generate": "prisma generate --schema=server/prisma/schema.prisma"
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -44,6 +44,11 @@
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.14",
     "ts-jest": "^29.2.5",
+    "tsx": "^4.19.2",
     "typescript": "^5"
+  },
+  "prisma": {
+    "schema": "server/prisma/schema.prisma",
+    "seed": "tsx server/prisma/seed"
   }
 }
