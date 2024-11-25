@@ -1,26 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/text-area";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbSeparator,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { GetDonors } from "@/lib/api/donor";
+import { GetDonors } from "@/lib/api/donor.api";
 import { useSearchParams } from "next/navigation";
-import { IDonor } from "@/lib/type/donor";
+import { IDonor } from "@/types/donor.types";
 import { formatTime } from "@/lib/utils";
 
 export default function DonorPage() {
@@ -57,38 +57,7 @@ export default function DonorPage() {
 
     try {
       // const response = await fetch(url);
-      const res = await GetDonors(); // Get the CSV data as a string
-
-      const donors: IDonor[] = res.data.map((data) => ({
-        pmm: data[0],
-        smm: data[1],
-        vmm: data[2],
-        exclude: data[3],
-        deceased: data[4],
-        first_name: data[5],
-        nick_name: data[6],
-        last_name: data[7],
-        organization_name: data[8],
-        total_donations: data[9],
-        total_pledge: data[10],
-        largest_gift: data[11],
-        largest_gift_appeal: data[12],
-        first_gift_date: data[13],
-        last_gift_date: data[14],
-        last_gift_amount: data[15],
-        last_gift_request: data[16],
-        last_gift_appeal: data[17],
-        address_line1: data[18],
-        address_line2: data[19],
-        city: data[20],
-        contact_phone_type: data[21],
-        phone_restrictions: data[22],
-        email_restrictions: data[23],
-        communication_restrictions: data[24],
-        subscription_events_in_person: data[25],
-        subscription_events_magazine: data[26],
-        communication_preference: data[27],
-      }));
+      const donors = await GetDonors(); // Get the CSV data as a string
 
       const donor = donors.filter(
         (donor) =>
