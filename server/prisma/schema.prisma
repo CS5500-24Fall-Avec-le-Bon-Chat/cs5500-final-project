@@ -1,0 +1,97 @@
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+  
+generator client {
+  provider = "prisma-client-js"
+  seed = "server/prisma/seed.ts"
+}
+  
+model User {
+  id         Int @id @default (autoincrement())
+  name      String @db.VarChar(255)
+  // password  String @db.VarChar(255)
+  role      Role @default (FUNDRAISER)
+  holdEvents  EventFundraiser[] @relation("UserEvents")
+  donors    Donor[] @relation("UserDonors")
+  comments  Comment[] @relation("UserComments")
+}
+  
+model Event {
+  id        Int @id @default (autoincrement())
+  date      DateTime @default (now())
+  title     String @db.VarChar(255)
+  topic     String @db.VarChar(255)
+  city      City @default(VANCOUVER)
+  address   String? @db.VarChar(255)
+  description String? @db.VarChar(255)
+  goal      Float
+  completed Float
+  fundraiser  EventFundraiser[]
+  attendees   EventAttendee[]
+  comments    Comment[]
+}
+
+model Donor {
+  id        Int @id @default (autoincrement())
+  name      String
+  fundraiser    User @relation(fields: [fundraiserId], references: [id], name: "UserDonors")
+  fundraiserId  Int
+  comments    Comment[]
+  eventAttendees EventAttendee[]
+}
+
+model EventAttendee {
+  id        Int @id @default (autoincrement())
+  event     Event @relation(fields: [eventId], references: [id])
+  eventId   Int
+  donor     Donor @relation(fields: [donorId], references: [id])
+  donorId   Int
+  amount    Float @default(0) // amount donated
+}
+
+model EventFundraiser {
+  id        Int @id @default (autoincrement())
+  event     Event @relation(fields: [eventId], references: [id])
+  eventId   Int
+  fundraiser    User @relation(fields: [fundraiserId], references: [id], name: "UserEvents")
+  fundraiserId  Int 
+}
+
+model Comment {
+  id        Int @id @default (autoincrement())
+  type      ReasonType @default(ADD)
+  content    String @db.VarChar(255)
+  createdAt DateTime @default (now())
+  fundraiser    User @relation(fields: [fundraiserId], references: [id], name: "UserComments")
+  fundraiserId  Int
+  donor     Donor @relation(fields: [donorId], references: [id])
+  donorId   Int
+  event     Event? @relation(fields: [eventId], references: [id])
+  eventId   Int?
+}
+
+enum Role {
+  COORDINATOR
+  FUNDRAISER
+}
+
+enum ReasonType {
+  ADD
+  REMOVE
+  OTHER
+}
+enum City {
+  VICTORIA
+  NANAIMO
+  COURTENAY
+  PARKSVILLE
+  CAMPBELL_RIVER
+  SAANICH
+  VANCOUVER
+  SURREY
+  BURNABY
+  RICHMOND
+}
