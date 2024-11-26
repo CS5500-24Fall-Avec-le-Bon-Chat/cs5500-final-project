@@ -17,7 +17,8 @@ export interface Event {
   theme: string;
   tasks: Task[];
   donors: Donor[];
-  donorTarget?: number;
+  donorTarget: number;
+  completed: number;
 }
 
 export const events: Event[] = [
@@ -44,7 +45,9 @@ export const events: Event[] = [
       { id: 3, text: "Create promotional materials", status: "undone" },
       { id: 4, text: "Prepare donation boxes", status: "undone" },
       { id: 5, text: "Coordinate with volunteers", status: "undone" },
-    ], // Example task list for the event
+    ], 
+    donorTarget: 10000.00, // Fundraising goal
+    completed: 5000.00 // Example task list for the event// Example task list for the event
   },
   {
     id: 2, // Unique identifier
@@ -75,7 +78,9 @@ export const events: Event[] = [
         text: "Organize safety equipment for participants",
         status: "undone",
       },
-    ], // Example task list for the event
+    ],
+    donorTarget: 10000.00, // Fundraising goal
+    completed: 500.00 // Example task list for the event
   },
   {
     id: 3, // Unique identifier
@@ -97,6 +102,8 @@ export const events: Event[] = [
       { id: 4, text: "Prepare live music schedule", status: "undone" },
       { id: 5, text: "Promote event on social media", status: "undone" },
       { id: 6, text: "Arrange shaving station setup", status: "undone" },
-    ], // Example task list for the event
+    ], 
+    donorTarget: 10000.00, // Fundraising goal
+    completed: 1230.00 // Example task list for the event// Example task list for the event
   },
 ];

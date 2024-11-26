@@ -29,6 +29,8 @@ import {
   transformDonorData,
 } from "@/components/objects/donor";
 import Link from "next/link";
+import CircularProgress from "@/components/CircularProgress"; // Import the CircularProgress component
+
 
 export default function FundraiserPage() {
   const [events, setEvents] = useState<Event[]>(defaultEventList); // Initialize with defaultEventList
@@ -44,11 +46,31 @@ export default function FundraiserPage() {
     selectedEvent.donors.filter((donor) => donor.invited).length,
   );
   const [username, setUsername] = useState("");
-
+  
+  const calculateGoalProgress = () => {
+    const completed = selectedEvent.completed; // The amount completed
+    const target = selectedEvent.donorTarget; // The total target goal
+    // Calculate the percentage progress
+    return (completed / target) * 100;
+  };
+  
   useEffect(() => {
     // Update localStorage whenever events change
     localStorage.setItem("events", JSON.stringify(events));
   }, [events]);
+
+  useEffect(() => {
+  // Access localStorage only on the client side
+  setUsername(localStorage.getItem("username") || "");
+
+  // Fetch events and selected event from localStorage
+  const storedEvents = localStorage.getItem("events");
+  if (storedEvents) {
+    const parsedEvents = JSON.parse(storedEvents);
+    setEvents(parsedEvents); // Set events from localStorage
+    setSelectedEvent(parsedEvents[0]); // Set the first event as the selected event
+  }
+}, []);
 
   useEffect(() => {
     // Access localStorage only on the client side
@@ -207,6 +229,12 @@ export default function FundraiserPage() {
       <div className="flex">
         {/* Event List Column */}
         <div className="w-1/6 p-4">
+           {/* Create Event Button */}
+            <Link href="/create-event">
+             <Button variant="outline" className="w-full mb-4">
+               Create Event
+            </Button>
+            </Link>
           <ScrollArea className="h-48">
             <ul>
               {events.map((event) => (
@@ -242,7 +270,20 @@ export default function FundraiserPage() {
               <p>
                 <strong>Theme:</strong> {selectedEvent.theme}
               </p>
-
+              <p>
+                <strong>Goal: $</strong> {selectedEvent.donorTarget}
+              </p>
+              <p>
+                <strong>Completed:</strong>
+              </p>
+                {/* Goal Circle */}
+                <div className="flex justify-center items-center mt-8">
+                  <CircularProgress
+                    progress={calculateGoalProgress()}
+                    size={120} // Size of the circle
+                    strokeWidth={10} // Stroke width of the circle
+                  />
+                </div>
               <Button
                 variant="outline"
                 className="mt-4"
