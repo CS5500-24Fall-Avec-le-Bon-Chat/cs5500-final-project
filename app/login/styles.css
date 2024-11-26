@@ -1,0 +1,8 @@
+/* styles.css */
+.background {
+    background-image: url('../../public/groupWork.png');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 120% auto;
+    min-height: 100vh;
+  }
