@@ -19,7 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Papa from "papaparse";
-import {
+import { 
   events as defaultEventList,
   Event,
   Task,
@@ -32,12 +32,12 @@ import Link from "next/link";
 import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
 
 export default function FundraiserPage() {
-  const [events, setEvents] = useState<Event[]>(defaultEventList); // Initialize with defaultEventList
+  const [events, setEvents] = useState<Event[]>(defaultEventList);
   const [selectedEvent, setSelectedEvent] = useState<Event>(
     defaultEventList[0],
   );
 
-  const [tasks, setTasks] = useState<Task[]>(selectedEvent.tasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskText, setNewTaskText] = useState("");
   const [view, setView] = useState("tasks"); // State to toggle between tasks and donors
   const [, setLoading] = useState(false); // Loading state for fetching data
@@ -52,23 +52,49 @@ export default function FundraiserPage() {
   }, [events]);
 
   useEffect(() => {
+    localStorage.setItem(`tasks-${selectedEvent.id}`, JSON.stringify(tasks));
+  }, [tasks, selectedEvent]);
+
+  useEffect(() => {
     // Access localStorage only on the client side
     setUsername(localStorage.getItem("username") || "");
     const storedEvents = localStorage.getItem("events");
     if (storedEvents) {
       const parsedEvents = JSON.parse(storedEvents);
       setEvents(parsedEvents);
-      setSelectedEvent(parsedEvents[0]); // Update selectedEvent based on stored events
+      setSelectedEvent(parsedEvents[0]);
     }
   }, []);
+
+  // Fetch tasks for the selected event from localStorage
+  useEffect(() => {
+    const fetchTasksForEvent = () => {
+      const storedTasks = localStorage.getItem(`tasks-${selectedEvent.id}`);
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      } else {
+        setTasks(selectedEvent.tasks || []);
+      }
+    };
+
+    fetchTasksForEvent();
+  }, [selectedEvent]);
+
+  const handleEventSelection = (event: Event) => {
+    setSelectedEvent(event);
+    const storedTasks = localStorage.getItem(`tasks-${event.id}`);
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    } else {
+      setTasks(event.tasks || []);
+    }
+  };
+
+  
 
   const calculateInvitedCount = useCallback(() => {
     return selectedEvent.donors.filter((donor) => donor.invited).length;
   }, [selectedEvent]);
-
-  useEffect(() => {
-    localStorage.setItem("events", JSON.stringify(events));
-  }, [events]);
 
   const regenerateDonors = async () => {
     setLoading(true);
@@ -130,35 +156,21 @@ export default function FundraiserPage() {
     );
     setEvents(updatedEvents);
   };
-
-  useEffect(() => {
-    setTasks(selectedEvent.tasks);
-  }, [selectedEvent]);
-
-  // Update the events array to reflect changes to selectedEvent tasks
-  const updateEventTasks = (updatedTasks: Task[]) => {
-    const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
-    setSelectedEvent(updatedEvent);
-
-    const updatedEvents = events.map((event) =>
-      event.id === updatedEvent.id ? updatedEvent : event,
-    );
-    setEvents(updatedEvents);
-  };
+  
 
   // Function to add a new task to the selected event
   const handleAddTask = () => {
-    if (newTaskText.trim()) {
-      const newTask: Task = {
-        id: Date.now(),
-        text: newTaskText,
-        status: "undone" as const,
-      };
-      const updatedTasks = [...tasks, newTask];
-      updateEventTasks(updatedTasks);
-      setNewTaskText("");
-    }
+    if (newTaskText.trim() === "") return;
+
+    const newTask: Task = {
+      id: tasks.length + 1,
+      text: newTaskText,
+      status: "undone",
+    };
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setNewTaskText("");
   };
+
 
   // Toggle task status within the selected event
   const toggleTaskStatus = (taskId: number) => {
@@ -170,20 +182,32 @@ export default function FundraiserPage() {
       }
       return task;
     });
-    updateEventTasks(updatedTasks);
+    setTasks(updatedTasks);
   };
+
 
   // Function to delete a task
   const deleteTask = (taskId: number) => {
     const updatedTasks = tasks.filter((task) => task.id !== taskId);
-    updateEventTasks(updatedTasks);
+    setTasks(updatedTasks);
   };
 
-  // Function to calculate task completion progress
   const calculateProgress = () => {
     const doneTasks = tasks.filter((task) => task.status === "done").length;
-    return (doneTasks / tasks.length) * 100;
+    return tasks.length > 0 ? (doneTasks / tasks.length) * 100 : 0;
   };
+
+  useEffect(() => {
+    const handleStorageChange = (e:StorageEvent) => {
+      if (e.key==="events" && e.newValue) {
+        if (e.key === "events") {
+          setEvents(JSON.parse(e.newValue));
+        }
+    };
+  };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <div className="flex mt-32 mx-auto max-w-6xl flex-col gap-8">
@@ -217,7 +241,7 @@ export default function FundraiserPage() {
                 <li
                   key={event.id}
                   className="cursor-pointer hover:bg-gray-200 p-2 mb-2 rounded text-center"
-                  onClick={() => setSelectedEvent(event)}
+                  onClick={() => handleEventSelection(event)}
                 >
                   {event.name}
                 </li>
