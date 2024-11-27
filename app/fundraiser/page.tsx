@@ -211,12 +211,14 @@ export default function FundraiserPage() {
       <div className="flex">
         {/* Event List Column */}
         <div className="w-1/6 p-4">
+          <h3 className="mb-4"><b>Current Events</b></h3>
           <ScrollArea className="h-48">
             <ul>
+              
               {events.map((event) => (
                 <li
                   key={event.id}
-                  className="cursor-pointer hover:bg-gray-200 p-2 mb-2 rounded text-center"
+                  className="cursor-pointer hover:bg-gray-200 p-2 mb-2 rounded text-left "
                   onClick={() => setSelectedEvent(event)}
                 >
                   {event.name}
