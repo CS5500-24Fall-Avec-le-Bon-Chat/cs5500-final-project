@@ -9,9 +9,9 @@ html,
     --background-wheat: #f5deb3;
     --background-light-green: #d3f5de;
     --foreground: 240 10% 3.9%;
-    --font-size-small: 14px;
-    --font-size-medium: 18px;
-    --font-size-large: 22px;
+    --font-size-small: 15px;
+    --font-size-medium: 19px;
+    --font-size-large: 23px;
   }
 
 body {
@@ -26,6 +26,20 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: var(--font-size-medium);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 2vw;
+    width: 10vw; /* Adjust the width as needed */
+    height: 10vh; /* Adjust the height as needed */
+    background: url('../public/logo.png') no-repeat center;
+    background-size: contain;
+    opacity: 0.8;
+    pointer-events: none; /* Ensure the logo doesn't interfere with other elements */
+    z-index: 10; /* Ensure the logo stays above other content */
 }
 
 body::after {
