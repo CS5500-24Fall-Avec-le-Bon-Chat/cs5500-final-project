@@ -23,6 +23,8 @@ import { useSearchParams } from "next/navigation";
 import { IDonor } from "@/types/donor.types";
 import { formatTime } from "@/lib/utils";
 import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
+
+
 export default function DonorPage() {
   const params = useSearchParams();
   const [firstName, setFirstName] = useState("");
@@ -43,32 +45,24 @@ export default function DonorPage() {
     setLastName(name.split(" ")[1]);
   }, [params]);
 
-  //This is ChatGpt code. It tries to use the Donor id to fecch the donor info, but there is no Donor Id in the api so it always fails.
-  // Can you filter by user first name and last name? When I tried it, it didn't work.
   useEffect(() => {
     fetchDonorData();
     fetchComments();
   }, [firstName, lastName]);
 
-  // Function to fetch donor data (fetching CSV data from an API or static source)
   const fetchDonorData = async () => {
-    setLoading(true); // Set loading state while fetching data
-    // const url = `https://bc-cancer-faux.onrender.com/donors?format=json`; // API URL (replace with your actual API endpoint)
-
+    setLoading(true);
     try {
-      // const response = await fetch(url);
-      const donors = await GetDonors(); // Get the CSV data as a string
-
+      const donors = await GetDonors();
       const donor = donors.filter(
         (donor) =>
           donor.first_name === firstName && donor.last_name === lastName,
       )[0];
-
       setDonor(donor);
     } catch (error) {
-      console.error("Error fetching donor data:", error); // Handle errors
+      console.error("Error fetching donor data:", error);
     } finally {
-      setLoading(false); // Set loading state to false when done
+      setLoading(false);
     }
   };
 
@@ -78,7 +72,6 @@ export default function DonorPage() {
     setComments(donorComments);
   };
 
-  // Handle comments submission (just logs it to the console)
   const handleSubmitComment = () => {
     const lsComments = JSON.parse(localStorage.getItem("comments") || "{}");
     const donorComments = lsComments[`${firstName} ${lastName}`] || [];
@@ -87,20 +80,17 @@ export default function DonorPage() {
       [`${firstName} ${lastName}`]: [...donorComments, commentsInput],
     };
     localStorage.setItem("comments", JSON.stringify(newComments));
-    setCommentsInput(""); // Clear the comments input after submission
+    setCommentsInput("");
     fetchComments();
   };
 
   if (loading || !donor) {
-    return <div>Loading...</div>; // Show loading indicator while data is being fetched
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="flex justify-center mt-32 mx-auto w-3/4 max-w-2xl flex-col gap-8">
-      <>
-      <FontSizeAndTheme/>
-      </>
-      {/* Breadcrumb Navigation */}
+    <div className="background flex justify-center mt-32 mx-auto w-3/4 max-w-2xl flex-col gap-8">
+      <FontSizeAndTheme />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -115,10 +105,7 @@ export default function DonorPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-
-      {/* Main Content */}
       <div className="flex gap-8">
-        {/* Donor Basic Info Column */}
         <div className="w-1/3">
           <Card className="shadow-none">
             <CardHeader>
@@ -128,10 +115,9 @@ export default function DonorPage() {
               <CardDescription>Donor Basic Information</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 ">
-                {/* Donor Profile Image */}
+              <div className="space-y-2">
                 <img
-                  src={"/defaultDonorPhoto.png"} // Using donor profile image (if available)
+                  src={"/defaultDonorPhoto.png"}
                   alt="Profile Photo"
                   className="w-32 h-32 rounded-full mx-auto"
                 />
@@ -145,52 +131,17 @@ export default function DonorPage() {
               </div>
             </CardContent>
           </Card>
-          <div>
-          {/*add a button to navigate back to the fundraiser page */}
           <Button
             className="mt-2 w-full"
             variant="outline"
             onClick={() => {
               window.location.href = "/fundraiser";
-            }}>
-              Back to Fundraiser Page
-              </Button>
+            }}
+          >
+            Back to Fundraiser Page
+          </Button>
         </div>
-        </div>
-        
-        {/* Donor Donation History Column (Always visible) */}
-        {/*<div className="w-1/3">*/}
-        {/*  <Card className="shadow-none">*/}
-        {/*    <CardHeader>*/}
-        {/*      <CardTitle>Donation History</CardTitle>*/}
-        {/*    </CardHeader>*/}
-        {/*    <CardContent>*/}
-        {/*      <h3 className="text-lg">Donation History</h3>*/}
-        {/*      <table className="w-full text-left mt-2">*/}
-        {/*        <thead>*/}
-        {/*          <tr>*/}
-        {/*            <th>Amount</th>*/}
-        {/*            <th>Date</th>*/}
-        {/*            <th>Appeal</th>*/}
-        {/*          </tr>*/}
-        {/*        </thead>*/}
-        {/*        <tbody>*/}
-        {/*          {donationHistory.map((donation, index) => (*/}
-        {/*            <tr key={index}>*/}
-        {/*              <td>${donation.amount}</td>*/}
-        {/*              <td>*/}
-        {/*                {new Date(donation.date * 1000).toLocaleDateString()}*/}
-        {/*              </td>*/}
-        {/*              <td>{donation.appeal}</td>*/}
-        {/*            </tr>*/}
-        {/*          ))}*/}
-        {/*        </tbody>*/}
-        {/*      </table>*/}
-        {/*    </CardContent>*/}
-        {/*  </Card>*/}
-        {/*</div>*/}
 
-        {/* Donor Detailed Info Column (Conditional) */}
         <div className="w-2/3">
           <Card className="shadow-none">
             <CardHeader>
@@ -240,8 +191,6 @@ export default function DonorPage() {
         </div>
       </div>
 
-      {/* right now the comments section only console logs the comments. We can use session storage or local storage to store the comments */}
-      {/* Comments Section */}
       <Card className="shadow-none mt-8">
         <CardHeader>
           <CardTitle>Comments</CardTitle>
