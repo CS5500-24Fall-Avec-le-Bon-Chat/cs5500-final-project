@@ -30,6 +30,7 @@ import {
 } from "@/components/objects/donor";
 import Link from "next/link";
 import CircularProgress from "@/components/CircularProgress"; // Import the CircularProgress component
+import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
 
 
 export default function FundraiserPage() {
