@@ -38,6 +38,12 @@ users, events, donors, comments, and event attendees.
 
 #### Work Flow
 
+Coordinators can create events, set up detailed information, assign fundraisers to the event, and establish a goal for it. Once the event is created, coordinators can also generate a list of donors.
+
+Fundraisers can invite or uninvite donors, view donor information, add comments, and document the donation amounts made by each donor for the event.
+
+All users can view past events, attendee lists, and comments. Additionally, they can search and filter committed comments for easier tracking and reference.
+
 1. create a new user and assign a role
 2. create a new event. Only a coordinator can create an event.
 3. create a new eventFundraiser to assign fundraisers to the event.

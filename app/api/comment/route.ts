@@ -112,7 +112,10 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const params = await req.json();
-    const comment = await CommentService.createComment(params);
+    const comment = await CommentService.createComment({
+      ...params,
+      createdAt: new Date(),
+    });
     return NextResponse.json(comment);
   } catch (error) {
     if (error instanceof Error && error.message === "Missing required fields") {
