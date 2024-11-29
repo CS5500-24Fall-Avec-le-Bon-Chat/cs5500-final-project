@@ -8,6 +8,7 @@ export interface Donor {
   communicationRestriction: string;
   subscriptions: string;
   invited: boolean;
+  fundraiserId?: number;
 }
 
 export interface DonorAPIResponse {
@@ -33,3 +34,8 @@ export const transformDonorData = (apiData: DonorAPIResponse[]): Donor[] => {
     invited: false, // Default unchecked
   }));
 };
+
+export interface DonorsContextProps {
+  donors: Donor[];
+  setDonors: React.Dispatch<React.SetStateAction<Donor[]>>;
+}
