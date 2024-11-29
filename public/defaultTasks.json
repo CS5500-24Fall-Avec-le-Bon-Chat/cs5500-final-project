@@ -1,0 +1,112 @@
+[
+  {
+    "eventId": 1,
+    "tasks": [
+      {
+        "id": 1,
+        "text": "Set up tables and chairs",
+        "status": "done"
+      },
+      {
+        "id": 2,
+        "text": "Prepare donation boxes",
+        "status": "undone"
+      },
+      {
+        "id": 3,
+        "text": "Send email reminders to participants",
+        "status": "undone"
+      },
+      {
+        "id": 4,
+        "text": "Contact Alyssa for catering",
+        "status": "undone"
+      },
+      {
+        "id": 5,
+        "text": "Coordinate with volunteers",
+        "status": "undone"
+      }
+    ]
+  },
+  {
+    "eventId": 2,
+    "tasks": [
+      {
+        "id": 1,
+        "text": "Check details with Darcy's Pub",
+        "status": "undone"
+      },
+      {
+        "id": 2,
+        "text": "Prepare events schedule",
+        "status": "undone"
+      },
+      {
+        "id": 3,
+        "text": "Prepare participant registration desk",
+        "status": "undone"
+      },
+      {
+        "id": 4,
+        "text": "Distribute promotional materials",
+        "status": "undone"
+      },
+      {
+        "id": 5,
+        "text": "Set up donation booths",
+        "status": "undone"
+      }
+    ]
+  },
+  {
+    "eventId": 3,
+    "tasks": [
+      {
+        "id": 1,
+        "text": "Organize auction items",
+        "status": "undone"
+      },
+      {
+        "id": 2,
+        "text": "Organize safety equipment for participants",
+        "status": "undone"
+      },
+      {
+        "id": 3,
+        "text": "Prepare participant registration desk",
+        "status": "undone"
+      }
+    ]
+  },
+  {
+    "eventId": 4,
+    "tasks": [
+      {
+        "id": 1,
+        "text": "Bring decorations",
+        "status": "undone"
+      },
+      {
+        "id": 2,
+        "text": "Finish budget report",
+        "status": "undone"
+      },
+      {
+        "id": 3,
+        "text": "Set up donation target board",
+        "status": "undone"
+      },
+      {
+        "id": 4,
+        "text": "Prepare donation boxes",
+        "status": "undone"
+      },
+      {
+        "id": 5,
+        "text": "Coordinate with volunteers",
+        "status": "undone"
+      }
+    ]
+  }
+]
