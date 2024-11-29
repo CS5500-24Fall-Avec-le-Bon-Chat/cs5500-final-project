@@ -113,6 +113,14 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const params = await req.json();
+
+    // Convert the date string to a Date object
+    if (params.date) {
+      params.date = new Date(params.date);
+    }
+    
+    console.log('Received params:', params); // Log received parameters
+
     const event = await EventService.createEvent(params);
     return NextResponse.json(event);
   } catch (error) {
