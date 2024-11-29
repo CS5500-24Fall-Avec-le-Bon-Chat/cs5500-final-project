@@ -18,6 +18,12 @@ export const TasksProvider = ({ children }) => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }
 
+    const completedTasksPercentage = () => {
+        const totalTasks = tasks.length;
+        if (totalTasks === 0) return 0;
+        const completedTasks = tasks.filter(task => task.status === "done").length;
+        return (completedTasks / totalTasks) * 100;
+    }
 
     useEffect(() => {
         getTasksFromLocalStorage();
@@ -28,7 +34,7 @@ export const TasksProvider = ({ children }) => {
     }, [tasks]);
 
     return (
-        <TasksContext.Provider value={{ tasks, setTasks }}>
+        <TasksContext.Provider value={{ tasks, setTasks, completedTasksPercentage }}>
             {children}
         </TasksContext.Provider>
     )
@@ -37,7 +43,7 @@ export const TasksProvider = ({ children }) => {
 export const useTasks = (): TasksContextProps => {
     const context = useContext(TasksContext);
     if (!context) {
-      throw new Error('useTasks must be used within a TasksProvider');
+        throw new Error('useTasks must be used within a TasksProvider');
     }
     return context;
-  };
+};

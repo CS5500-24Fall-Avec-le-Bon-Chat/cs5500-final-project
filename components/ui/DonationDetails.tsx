@@ -23,24 +23,17 @@ import CircularProgress from "@/components/CircularProgress"; // Import the Circ
 import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
 import { getEvents } from "@/lib/actions/event.action";
 import TasksDisplay from "./TasksDisplay";
-import { TasksProvider } from "./TasksProvider";
+import { TasksProvider, useTasks } from "./TasksProvider";
 import { DonorDisplay } from "./DonorDisplay";
 
 export default function donationDetails() {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event>({} as Event);
-
-  const [showTasks, setShowTasks] = useState(false);
-  const handleShowTasks = () => {
-    setShowTasks(true);
-  };
-
   const [view, setView] = useState("tasks"); // State to toggle between tasks and donors
   const [, setLoading] = useState(false); // Loading state for fetching data
-  // const [, setInvitedCount] = useState(
-  //   selectedEvent.donors.filter((donor) => donor.invited).length,
-  // );
   const [username, setUsername] = useState("");
+
+  const {completedTasksPercentage} = useTasks();
 
   const calculateGoalProgress = () => {
     const completed = selectedEvent.completed; // The amount completed
@@ -67,7 +60,7 @@ export default function donationDetails() {
       console.error('Error fetching events:', error);
     }
   };
-  
+
 
   useEffect(() => {
     fetchEvents();
@@ -158,23 +151,31 @@ export default function donationDetails() {
               <Button
                 variant="outline"
                 className="mt-4"
-                onClick={handleShowTasks}
+                onClick={() => setView("tasks")}
               >
                 List of Tasks
               </Button>
-
+              <div className="mt-4">
+                <div className="flex items-center mt-2">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-blue-500 h-2.5 rounded-full"
+                      style={{
+                        width: `${completedTasksPercentage()}%`,
+                      }}
+                    ></div>
+                  </div>
+                  {/* <span className="ml-2">
+                    {calculateInvitedCount()}/{selectedEvent.donors.length}
+                  </span> */}
+                </div>
+              </div>
               <Button
                 variant="outline"
                 className="mt-4"
                 onClick={() => setView("donors")}
               >
                 List of Donors
-              </Button>
-              <Button
-                variant="destructive"
-                className="mt-4 ml-2"
-              >
-                Reset Donor List
               </Button>
               <div className="mt-4">
                 <div className="flex items-center mt-2">
@@ -194,10 +195,8 @@ export default function donationDetails() {
             </CardContent>
           </Card>
         </div>
-        <TasksProvider>
-          {showTasks && <TasksDisplay eventId={selectedEvent.id} />}
-        </TasksProvider>
-        {<DonorDisplay eventId={selectedEvent.id} />}
+        {view === "tasks" && <TasksDisplay eventId={selectedEvent.id} />}
+        {view === "donors" && <DonorDisplay eventId={selectedEvent.id} />}
       </div>
     </div>
   );
