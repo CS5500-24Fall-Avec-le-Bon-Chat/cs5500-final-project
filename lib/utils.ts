@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import {z} from "zod"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -16,3 +17,15 @@ export function formatTime(time: number) {
     hour12: false,
   }).replace(",", "")
 }
+
+export const eventFormSchema = (type: string) => z.object({
+  title: z.string(),
+  topic: z.string(),
+  date: z.string(),
+  city: z.string(),
+  address: z.string(),
+  description: z.string(),
+  goal: z.number(),
+  completed: z.number(),
+})
+
