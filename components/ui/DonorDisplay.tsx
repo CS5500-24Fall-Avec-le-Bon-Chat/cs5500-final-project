@@ -1,11 +1,12 @@
-import React, { ToggleEventHandler, useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Button } from './button';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import Link from 'next/link';
 import { Donor, User } from '@prisma/client';
 import { getFundraiserByEvent } from '@/lib/actions/fundraiser.action';
-import { checkDonorInEvent, createEventAttendee, deleteEventAttendee, fetchDonorsByEventId, getDonorsByFundraiser } from '@/lib/actions/donor.action';
+import { createEventAttendee, deleteEventAttendee, fetchDonorsByEventId, getDonorsByFundraiser } from '@/lib/actions/donor.action';
+import { Input } from './input';
 import { set } from 'zod';
 
 export const DonorDisplay = (props: DonorDisplayProps) => {
@@ -13,6 +14,7 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
     const [fundraiserList, setFundraiserList] = useState<number[]>([]);
     const [loading, setLoading] = useState(false);
     const [invitedDonors, setInvitedDonors] = useState<Set<number>>(new Set());
+    const [backupDonors, setBackupDonors] = useState<Donor[]>([]);
 
     // Fetch donors for the event
     const fetchEventDonors = async () => {
@@ -25,6 +27,7 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
                 allDonors.push(...donorsForFundraiser);
             }
             setDonors(allDonors);
+            setBackupDonors(allDonors);
         } catch (error) {
             console.error("Error in fetchEventDonors:", error);
         } finally {
@@ -67,7 +70,7 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
                     return newInvited;
                 });
             }
-            
+
         } catch (error) {
             console.error("Error in toggleInvitation:", error);
         }
@@ -118,6 +121,25 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
         }
     }
 
+    const sortDonrosByName = () => {
+        setDonors((prev) => {
+            const newDonors = [...prev].sort((a, b) =>
+                a.name.localeCompare(b.name, "zh-Hans", { sensitivity: "base" })
+            );
+            return newDonors;
+        });
+    }
+
+    const searchDonors = (query: string) => {
+        if (!query) {
+            setDonors(backupDonors);
+            return;
+        } else {
+            const newDonors = backupDonors.filter((donor) => donor.name.toLowerCase().includes(query.toLowerCase()));
+            setDonors(newDonors);
+        }
+    }
+
     useEffect(() => {
         fetchEventDonors();
         fetchInvitedDonors();
@@ -133,19 +155,16 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
                 <>
                     <div className="flex gap-2 mb-4">
                         <Button
-                        // onClick={() =>
-                        //   setSelectedEvent((prev) => {
-                        //     const donors = prev.donors.sort((a, b) =>
-                        //       a.name.localeCompare(b.name, "zh-Hans", {
-                        //         sensitivity: "base",
-                        //       }),
-                        //     );
-                        //     return { ...prev, donors };
-                        //   })
-                        // }
+                            onClick={sortDonrosByName}
                         >
                             Sort by Name
                         </Button>
+                        <Input
+                            type="text"
+                            placeholder="Search Donor"
+                            className="w-1/2"
+                            onChange={(e) => searchDonors(e.target.value)}
+                        />
                     </div>
                     <ScrollArea className="">
                         <table className="w-full text-left">
