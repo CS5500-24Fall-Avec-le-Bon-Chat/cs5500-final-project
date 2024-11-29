@@ -86,6 +86,12 @@ export async function POST(req: NextRequest) {
     const params = await req.json();
     const eventAttendee =
       await EventAttendeeService.createEventAttendee(params);
+
+    // Check if eventAttendee already exists
+    if ("message" in eventAttendee && eventAttendee.message === "EventAttendee already exists") {
+      return NextResponse.json({message: eventAttendee.message}, { status: 200 });
+    }
+
     return NextResponse.json(eventAttendee);
   } catch (error) {
     if (error instanceof Error && error.message === "Missing required fields") {
@@ -168,11 +174,12 @@ export async function PATCH(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const params = await req.json();
-    const { id, eventId } = params;
+    const { donorId, eventId } = params;
 
-    if (id) {
+    if (donorId && eventId) {
       const eventAttendee = await EventAttendeeService.deleteEventAttendee({
-        id,
+        donorId,
+        eventId,
       });
       return NextResponse.json(eventAttendee);
     } else if (eventId) {

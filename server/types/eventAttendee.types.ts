@@ -28,7 +28,8 @@ export interface PatchEventAttendeeParams {
 }
 
 export interface DeleteEventAttendeeParams {
-    id: number;
+    eventId: number;
+    donorId: number;
 }
 
 export interface DeleteEventAttendeeByEventIdParams {

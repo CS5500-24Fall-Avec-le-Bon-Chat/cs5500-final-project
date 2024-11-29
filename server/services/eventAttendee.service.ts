@@ -21,15 +21,26 @@ export class EventAttendeeService {
     }
 
     try {
-      const eventAttendee = await prisma.eventAttendee.create({
-        data: {
+      const existingEventAttendee = await prisma.eventAttendee.findFirst({
+        where: {
           eventId: eventId,
           donorId: donorId,
-          amount: amount || 0,
         },
       });
+      if (!existingEventAttendee) {
 
-      return eventAttendee;
+        const eventAttendee = await prisma.eventAttendee.create({
+          data: {
+            eventId: eventId,
+            donorId: donorId,
+            amount: amount || 0,
+          },
+        });
+        return eventAttendee;
+      } else {
+        return { message: "EventAttendee already exists" };
+      }
+
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -150,14 +161,15 @@ export class EventAttendeeService {
     }
   }
 
-  // Delete a eventAttendee
+  // Delete a eventAttendee by eventId and donorId
   static async deleteEventAttendee(param: DeleteEventAttendeeParams) {
-    const { id } = param;
+    const { eventId, donorId } = param;
 
     try {
-      const eventAttendee = await prisma.eventAttendee.delete({
+      const eventAttendee = await prisma.eventAttendee.deleteMany({
         where: {
-          id: id,
+          eventId: eventId,
+          donorId: donorId,
         },
       });
 
