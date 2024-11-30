@@ -65,6 +65,11 @@ SHADOW_DATABASE_URL=mysql://DB_USER:DB_PASSWORD@dburl:3306/YOUR_SHADOW_DATABASE_
 
 #### Database Setup
 
+If you are using the local database, please complete the following step first:
+```
+pnpm run seed
+```
+
 Apply the migrations to your database:
 
 ```
