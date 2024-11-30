@@ -12,7 +12,7 @@ export class CommentService {
   // Create a new comment
   static async createComment(params: CreateCommentParams) {
     const { type, content, createdAt, fundraiserId, donorId, eventId } = params;
-    if (!type || !content || !createdAt || !fundraiserId || !donorId) {
+    if (!type || !content || !createdAt || !donorId) {
       throw new Error("Missing required fields");
     }
 
@@ -22,7 +22,7 @@ export class CommentService {
           type: type,
           content: content,
           createdAt: createdAt,
-          fundraiserId: fundraiserId,
+          fundraiserId: fundraiserId ?? null,
           donorId: donorId,
           eventId: eventId ?? null,
         },

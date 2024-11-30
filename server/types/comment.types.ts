@@ -4,7 +4,7 @@ export interface CreateCommentParams {
     type: ReasonType;
     content: string;
     createdAt: Date;
-    fundraiserId: number;
+    fundraiserId?: number;
     donorId: number;
     eventId?: number | null;
 }
