@@ -98,15 +98,10 @@ export default function FundraiserPage() {
     fetchTasksForEvent();
   }, [selectedEvent]);
 
-  const handleEventSelection = (event: Event) => {
-    setSelectedEvent(event);
-    const storedTasks = localStorage.getItem(`tasks-${event.id}`);
-    if (storedTasks) {
-      setTasks(JSON.parse(storedTasks));
-    } else {
-      setTasks(event.tasks || []);
-    }
-  };
+  useEffect(() => {
+    localStorage.setItem(`tasks-${selectedEvent.id}`, JSON.stringify(tasks));
+  }, [tasks, selectedEvent]);
+
 
   
 
@@ -395,6 +390,7 @@ export default function FundraiserPage() {
                     <li
                       key={task.id}
                       className="flex items-center mb-2 group relative hover:bg-gray-100 p-2 rounded"
+                      // onClick={() => handleEventSelection(selectedEvent)}
                     >
                       <input
                         type="checkbox"
