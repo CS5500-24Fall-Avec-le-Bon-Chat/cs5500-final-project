@@ -27,6 +27,7 @@ import { createComment, fetchCommentsByDonor, fetchDonorIdByDonorName } from "@/
 import { Comments } from "../objects/donor";
 import { Input } from "./input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./select";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 
 export default function DonorPage() {
@@ -240,24 +241,26 @@ export default function DonorPage() {
 
                         </CardHeader>
                         <CardContent>
-                            <div className="space-y-2">
-                                {displayedComments.map((comment, index) => (
-                                    <div key={index} className="bg-gray-100 p-2 rounded-md">
-                                        <p>{comment.content}</p>
-                                        <small>
-                                            Type: {comment.type}
-                                        </small>
-                                        <br />
-                                        <small>
-                                            Fundraiser ID: {comment.fundraiserId}
-                                        </small>
-                                        <br />
-                                        <small>
-                                            Created At: {new Date(comment.createdAt).toLocaleString()}
-                                        </small>
-                                    </div>
-                                ))}
-                            </div>
+                            <ScrollArea className="h-48 overflow-y-auto">
+                                <div className="space-y-2">
+                                    {displayedComments.map((comment, index) => (
+                                        <div key={index} className="bg-gray-100 p-2 rounded-md">
+                                            <p>{comment.content}</p>
+                                            <small>
+                                                Type: {comment.type}
+                                            </small>
+                                            <br />
+                                            <small>
+                                                Fundraiser ID: {comment.fundraiserId}
+                                            </small>
+                                            <br />
+                                            <small>
+                                                Created At: {new Date(comment.createdAt).toLocaleString()}
+                                            </small>
+                                        </div>
+                                    ))}
+                                </div>
+                            </ScrollArea>
                         </CardContent>
                     </Card>
                 </div>

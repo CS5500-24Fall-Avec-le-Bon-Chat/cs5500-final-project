@@ -26,7 +26,7 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
     return (
         <Card className="shadow-none mb-4">
             <CardHeader>
-                <CardTitle>Donors for {props.eventId}</CardTitle>
+                <CardTitle>Donors</CardTitle>
             </CardHeader>
             <CardContent>
                 <>
