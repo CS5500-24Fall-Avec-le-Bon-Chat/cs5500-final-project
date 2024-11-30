@@ -34,8 +34,8 @@ export default function donationDetails() {
   const [, setLoading] = useState(false); // Loading state for fetching data
   const [username, setUsername] = useState("");
 
-  const {completedTasksPercentage} = useTasks();
-  const { completedInvitedDonors, fetchProgress, donors, invitedDonors} = useDonors();
+  const { completedTasksPercentage } = useTasks();
+  const { completedInvitedDonors, fetchProgress, donors, invitedDonors } = useDonors();
 
   const calculateGoalProgress = () => {
     const completed = selectedEvent.completed; // The amount completed
@@ -65,7 +65,7 @@ export default function donationDetails() {
 
   // format the date
   const formatDate = (date: string) => {
-    return date ? date.split("T")[0]: "";
+    return date ? date.split("T")[0] : "";
   };
 
 
@@ -123,78 +123,80 @@ export default function donationDetails() {
 
         {/* Event Details Column */}
         <div className="w-5/12 p-4">
-          <Card className="shadow-none">
-            <CardHeader>
-              <CardTitle>{selectedEvent.title}</CardTitle>
-              <CardDescription>{selectedEvent.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>
-                <strong>Theme:</strong> {selectedEvent.topic}
-              </p>
-              <p>
-                <strong>Date:</strong> {formatDate(selectedEvent.date)}
-              </p>
-              <p>
-                <strong>Location:</strong> {selectedEvent.city}
-              </p>
-              <p>
-                <strong>Address:</strong> {selectedEvent.address}
-              </p>
-              <p>
-                <strong>Goal: $</strong> {selectedEvent.goal}
-              </p>
-              <p>
-                <strong>Completed:</strong>
-              </p>
-              {/* Goal Circle */}
-              {/* <div className="flex justify-center items-center mt-8">
+          <ScrollArea className="max-h-[65.5vh] overflow-y-auto bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Card className="shadow-none">
+              <CardHeader>
+                <CardTitle>{selectedEvent.title}</CardTitle>
+                <CardDescription>{selectedEvent.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  <strong>Theme:</strong> {selectedEvent.topic}
+                </p>
+                <p>
+                  <strong>Date:</strong> {formatDate(selectedEvent.date)}
+                </p>
+                <p>
+                  <strong>Location:</strong> {selectedEvent.city}
+                </p>
+                <p>
+                  <strong>Address:</strong> {selectedEvent.address}
+                </p>
+                <p>
+                  <strong>Goal: $</strong> {selectedEvent.goal}
+                </p>
+                <p>
+                  <strong>Completed:</strong>
+                </p>
+                {/* Goal Circle */}
+                {/* <div className="flex justify-center items-center mt-8">
                 <CircularProgress
                   progress={calculateGoalProgress()}
                   size={120} // Size of the circle
                   strokeWidth={10} // Stroke width of the circle
                 />
               </div> */}
-              <Button
-                variant="outline"
-                className="mt-4"
-                onClick={() => setView("tasks")}
-              >
-                List of Tasks
-              </Button>
-              <div className="mt-4">
-                <div className="flex items-center mt-2">
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div
-                      className="bg-blue-500 h-2.5 rounded-full"
-                      style={{
-                        width: `${completedTasksPercentage()}%`,
-                      }}
-                    ></div>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={() => setView("tasks")}
+                >
+                  List of Tasks
+                </Button>
+                <div className="mt-4">
+                  <div className="flex items-center mt-2">
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                      <div
+                        className="bg-blue-500 h-2.5 rounded-full"
+                        style={{
+                          width: `${completedTasksPercentage()}%`,
+                        }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <Button
-                variant="outline"
-                className="mt-4"
-                onClick={() => setView("donors")}
-              >
-                List of Donors
-              </Button>
-              <div className="mt-4">
-                <div className="flex items-center mt-2">
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div
-                      className="bg-blue-500 h-2.5 rounded-full"
-                      style={{
-                        width: `${completedInvitedDonors}%`,
-                      }}
-                    ></div>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={() => setView("donors")}
+                >
+                  List of Donors
+                </Button>
+                <div className="mt-4">
+                  <div className="flex items-center mt-2">
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                      <div
+                        className="bg-blue-500 h-2.5 rounded-full"
+                        style={{
+                          width: `${completedInvitedDonors}%`,
+                        }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </ScrollArea>
         </div>
         {view === "tasks" && <TasksDisplay eventId={selectedEvent.id} />}
         {view === "donors" && <DonorDisplay eventId={selectedEvent.id} />}
