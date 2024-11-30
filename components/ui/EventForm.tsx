@@ -117,7 +117,7 @@ const EventForm = ({ type }: { type: string }) => {
                 }
             }
 
-            alert("An error occurred during the event creation process. Please try again.");
+            alert("Please fill in all the required fields and try again.");
         }
     };
 
