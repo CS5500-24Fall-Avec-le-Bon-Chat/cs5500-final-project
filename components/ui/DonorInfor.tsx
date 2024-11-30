@@ -41,6 +41,7 @@ export default function DonorPage() {
 
     useEffect(() => {
         setUsername(localStorage.getItem("username") || "");
+        getCommentsByDonor({ donorId });
     }, []);
 
     useEffect(() => {
@@ -54,7 +55,6 @@ export default function DonorPage() {
 
     useEffect(() => {
         fetchDonorData();
-        // fetchComments();
     }, [firstName, lastName]);
 
     useEffect(() => {
@@ -100,7 +100,8 @@ export default function DonorPage() {
         try {
             console.log("comments", params);
             const comments = await createComment(params);
-            setComments((prev) => [...prev, comments.content]);
+            setComments((prev) => [...prev, comments]);
+            setCommentsInput("");
         } catch (error) {
             console.error("Error submitting comment:", error);
         }
@@ -205,17 +206,17 @@ export default function DonorPage() {
                                 {comments.map((comment, index) => (
                                     <div key={index} className="bg-gray-100 p-2 rounded-md">
                                         <p>{comment.content}</p>
-                                        <small>
+                                        {/* <small>
                                             Type: {comment.type}
-                                        </small>
+                                        </small> */}
                                         {/* <br />
                                         <small>
                                             Fundraiser ID: {comment.fundraiserId}
-                                        </small> */}
+                                        </small>
                                         <br />
                                         <small>
                                             Created At: {new Date(comment.createdAt).toLocaleString()}
-                                        </small>
+                                        </small> */}
                                     </div>
                                 ))}
                             </div>
