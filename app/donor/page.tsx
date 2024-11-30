@@ -24,7 +24,6 @@ import { IDonor } from "@/types/donor.types";
 import { formatTime } from "@/lib/utils";
 import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
 
-
 export default function DonorPage() {
   const params = useSearchParams();
   const [firstName, setFirstName] = useState("");
@@ -33,6 +32,8 @@ export default function DonorPage() {
   const [loading, setLoading] = useState(true); // Loading state for data fetching
   const [commentsInput, setCommentsInput] = useState(""); // Store comments input
   const [comments, setComments] = useState<string[]>([]); // Store comments
+  const [searchQuery, setSearchQuery] = useState(""); // Store the search query
+  const [filteredComments, setFilteredComments] = useState<string[]>([]); // Store filtered comments
   const [username, setUsername] = useState(""); // Toggle between basic and detailed view
 
   useEffect(() => {
@@ -49,6 +50,10 @@ export default function DonorPage() {
     fetchDonorData();
     fetchComments();
   }, [firstName, lastName]);
+
+  useEffect(() => {
+    handleSearchComments(searchQuery); // Filter comments whenever the search query changes
+  }, [searchQuery, comments]);
 
   const fetchDonorData = async () => {
     setLoading(true);
@@ -82,6 +87,18 @@ export default function DonorPage() {
     localStorage.setItem("comments", JSON.stringify(newComments));
     setCommentsInput("");
     fetchComments();
+  };
+
+  const handleSearchComments = (query: string) => {
+    if (!query) {
+      setFilteredComments(comments);
+    } else {
+      const lowerCaseQuery = query.toLowerCase();
+      const filtered = comments.filter((comment) =>
+        comment.toLowerCase().includes(lowerCaseQuery),
+      );
+      setFilteredComments(filtered);
+    }
   };
 
   if (loading || !donor) {
@@ -179,8 +196,15 @@ export default function DonorPage() {
               <CardTitle>Comments</CardTitle>
             </CardHeader>
             <CardContent>
+              <input
+                type="text"
+                placeholder="Search comments..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4"
+              />
               <div className="space-y-2">
-                {comments.map((comment, index) => (
+                {filteredComments.map((comment, index) => (
                   <div key={index} className="bg-gray-100 p-2 rounded-md">
                     {comment}
                   </div>
@@ -193,7 +217,7 @@ export default function DonorPage() {
 
       <Card className="shadow-none mt-8">
         <CardHeader>
-          <CardTitle>Comments</CardTitle>
+          <CardTitle>Add a Comment</CardTitle>
         </CardHeader>
         <CardContent>
           <Textarea
