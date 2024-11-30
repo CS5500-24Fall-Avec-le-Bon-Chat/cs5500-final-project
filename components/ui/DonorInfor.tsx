@@ -136,7 +136,7 @@ export default function DonorPage() {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbLink href="/staff">Friends</BreadcrumbLink>
+                        <BreadcrumbLink href="/fundraiser">Fundraiser</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbPage>Donor</BreadcrumbPage>

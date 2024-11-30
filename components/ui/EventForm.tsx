@@ -15,6 +15,7 @@ import { eventFormSchema } from "@/lib/utils";
 import { z } from "zod";
 import { createEvent, createEventFundraiser, deleteEvent } from "@/lib/actions/event.action";
 import FontSizeAndTheme from "./FontSizeAndTheme";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "./breadcrumb";
 
 enum City {
     VICTORIA = "Victoria",
@@ -140,9 +141,20 @@ const EventForm = ({ type }: { type: string }) => {
 
     return (
         <div className="max-w-4xl mx-auto p-8 space-y-6">
-            <>
-                <FontSizeAndTheme />
-            </>
+            <FontSizeAndTheme />
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/fundraiser">Fundraiser</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbPage>Create Event</BreadcrumbPage>
+                </BreadcrumbList>
+            </Breadcrumb>
             {/* Event Details Card */}
             <Card className="shadow-none">
                 <CardHeader>

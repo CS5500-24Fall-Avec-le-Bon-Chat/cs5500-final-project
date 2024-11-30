@@ -86,10 +86,6 @@ export default function donationDetails() {
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/staff">Staff</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
             <BreadcrumbPage>Fundraiser</BreadcrumbPage>
           </BreadcrumbList>
         </Breadcrumb>
