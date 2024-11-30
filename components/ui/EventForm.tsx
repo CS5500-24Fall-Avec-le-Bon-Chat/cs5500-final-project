@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/text-area";
@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/card";
 import { eventFormSchema } from "@/lib/utils";
 import { z } from "zod";
-import { createEvent } from "@/lib/actions/event.action";
+import { createEvent, createEventFundraiser, deleteEvent } from "@/lib/actions/event.action";
+import FontSizeAndTheme from "./FontSizeAndTheme";
 
 enum City {
     VICTORIA = "Victoria",
@@ -39,8 +40,10 @@ const EventForm = ({ type }: { type: string }) => {
     const [description, setDescription] = useState("");
     const [goal, setGoal] = useState(0);
     const eventSchema = eventFormSchema(type);
+    const [fundraisers, setFundraisers] = useState([]);
+    const [selectedFundraisers, setSelectedFundraisers] = useState<string[]>([]);
 
-    const onSubmit = async (data: z.infer<typeof eventSchema>) => {
+    const onSubmitEvent = async (data: z.infer<typeof eventSchema>) => {
         try {
             const eventData = {
                 title: title!,
@@ -55,6 +58,7 @@ const EventForm = ({ type }: { type: string }) => {
             const newEvent = await createEvent(eventData);
             setEvent(newEvent);
             alert("Event has been created successfully");
+            return newEvent;
 
         } catch (error) {
             console.error(error);
@@ -62,8 +66,83 @@ const EventForm = ({ type }: { type: string }) => {
     };
 
 
+    const onSubmit = async () => {
+        let newEvent = null;
+
+        try {
+            // Start the event creation process
+            newEvent = await onSubmitEvent({
+                title,
+                topic,
+                date,
+                city,
+                address,
+                description,
+                goal,
+                completed: 0,
+            });
+
+            if (!newEvent || !newEvent.id) {
+                throw new Error("Event creation failed or event ID is missing.");
+            }
+
+            console.log("Event created successfully:", newEvent);
+
+            // Attempt to link fundraisers to the event
+            const fundraiserResponses = [];
+            for (const fundraiserId of selectedFundraisers) {
+                const response = await createEventFundraiser({
+                    eventId: newEvent.id,
+                    fundraiserId: Number(fundraiserId),
+                });
+                fundraiserResponses.push(response);
+            }
+
+            console.log("All fundraisers linked successfully:", fundraiserResponses);
+
+            // If everything is successful, reload the page
+            alert("Event and fundraisers created successfully.");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error during event creation process:", error);
+
+            // Rollback logic
+            if (newEvent && newEvent.id) {
+                console.warn("Rolling back: Deleting the created event...");
+                try {
+                    await deleteEvent(newEvent.id); // Add a deleteEvent API call in your backend
+                    console.log("Rollback successful: Event deleted.");
+                } catch (rollbackError) {
+                    console.error("Rollback failed: Unable to delete event.", rollbackError);
+                }
+            }
+
+            alert("An error occurred during the event creation process. Please try again.");
+        }
+    };
+
+    const fetchFundraisers = async () => {
+        try {
+            const response = await fetch("/api/users");
+            const data = await response.json();
+            setFundraisers(data);
+            console.log("fundraiser", fundraisers);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchFundraisers();
+    }, []);
+
+
+
     return (
         <div className="max-w-4xl mx-auto p-8 space-y-6">
+            <>
+                <FontSizeAndTheme />
+            </>
             {/* Event Details Card */}
             <Card className="shadow-none">
                 <CardHeader>
@@ -130,7 +209,40 @@ const EventForm = ({ type }: { type: string }) => {
                         />
 
                         {/* Choose Fundraiser multiple choose*/}
-                        
+                        <table className="table-auto w-full border-collapse border border-gray-300">
+                            <thead className="bg-gray-100">
+                                <tr>
+                                    <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Name</th>
+                                    <th className="border border-gray-300 px-4 py-2 text-center font-semibold">Choose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {fundraisers.map((fundraiser) => (
+                                    <tr
+                                        key={fundraiser.id}
+                                        className="hover:bg-gray-50 transition-colors"
+                                    >
+                                        <td className="border border-gray-300 px-4 py-2">{fundraiser.name}</td>
+                                        <td className="border border-gray-300 px-4 py-2 text-center">
+                                            <input
+                                                type="checkbox"
+                                                className="w-5 h-5 text-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 rounded"
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectedFundraisers((prev) => [...new Set([...prev, fundraiser.id as string])]);
+                                                    } else {
+                                                        setSelectedFundraisers((prev) =>
+                                                            prev.filter((id) => id !== fundraiser.id)
+                                                        );
+                                                    }
+                                                }}
+                                            />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
 
                         {/* Fundraising Goal */}
                         <Input
@@ -149,9 +261,8 @@ const EventForm = ({ type }: { type: string }) => {
             <Button
                 variant="outline"
                 className="w-full mt-4"
-                onClick={() => onSubmit({
-                    title, topic, date, city, address, description, goal, completed: 0
-                })}
+                onClick={() => { onSubmit() }}
+                disabled={selectedFundraisers.length === 0}
             >
                 Create Event
             </Button>

@@ -17,7 +17,7 @@ export class EventService {
     // The input param - fundraiserId is the id of the user who is holding the event not the user who is creating the event.
     static async createEvent(params: CreateEventParams) {
         const { title, topic, date, city, address, description, goal, completed } = params;
-        if (!title || !topic || !date || !city || !goal || !completed) {
+        if (!title || !topic || !date || !city || typeof goal !== 'number' || typeof completed !== 'number') {
             throw new Error("Missing required fields");
         }
 

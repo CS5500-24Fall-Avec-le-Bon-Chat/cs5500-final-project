@@ -9,6 +9,12 @@ declare type CreateEventParam = {
     completed: number;
 };
 
+declare type CreateEventFundraiserParam = {
+    eventId: number;
+    fundraiserId: number;
+};
+
+
 declare type GetDonorByFundraiserParam = {
     fundraiserId: number;
 };
