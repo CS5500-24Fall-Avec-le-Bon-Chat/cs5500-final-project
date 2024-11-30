@@ -20,11 +20,13 @@ import {
 } from "@/components/ui/breadcrumb";
 import { GetDonors } from "@/lib/api/donor.api";
 import { useSearchParams } from "next/navigation";
-import { IDonor} from "@/types/donor.types";
+import { IDonor } from "@/types/donor.types";
 import { formatTime } from "@/lib/utils";
 import FontSizeAndTheme from "@/components/ui/FontSizeAndTheme";
-import { createComment, fetchCommentsByDonor, fetchDonorIdByDonorName} from "@/lib/actions/donor.action";
+import { createComment, fetchCommentsByDonor, fetchDonorIdByDonorName } from "@/lib/actions/donor.action";
 import { Comments } from "../objects/donor";
+import { Input } from "./input";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "./select";
 
 
 export default function DonorPage() {
@@ -38,6 +40,9 @@ export default function DonorPage() {
     const [username, setUsername] = useState(""); // Toggle between basic and detailed view
     const [donorId, setDonorId] = useState(0);
     const [fundraiserId, setFundraiserId] = useState(0);
+    const [commentType, setCommentType] = useState("ADD");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchCommentType, setSearchCommentType] = useState("ALL");
 
     useEffect(() => {
         setUsername(localStorage.getItem("username") || "");
@@ -106,6 +111,15 @@ export default function DonorPage() {
             console.error("Error submitting comment:", error);
         }
     };
+
+    const filterdComments = (params: FilterdCommentsParams) => {
+        return comments.filter(comment => {
+            const matchesType = params.type === 'ALL' || comment.type === params.type;
+            const matchesQuery = comment.content.toLowerCase().includes((params.query || "").toLowerCase());
+            return matchesType && matchesQuery;
+        });
+    }
+    const displayedComments = filterdComments({ type: searchCommentType, query: searchQuery });
 
     if (loading || !donor) {
         return <div>Loading...</div>;
@@ -199,24 +213,48 @@ export default function DonorPage() {
                     </Card>
                     <Card className="shadow-none mt-4">
                         <CardHeader>
-                            <CardTitle>Comments</CardTitle>
+                            <div className="flex items-center">
+                                <CardTitle>
+                                    Comments
+                                </CardTitle>
+                                <Select value={searchCommentType} onValueChange={setSearchCommentType}>
+                                    <SelectTrigger className="ml-2 w-20">
+                                        {/* Display the current selection */}
+                                        <span>{searchCommentType}</span>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="ALL">ALL</SelectItem>
+                                        <SelectItem value="ADD">ADD</SelectItem>
+                                        <SelectItem value="REMOVE">REMOVE</SelectItem>
+                                        <SelectItem value="OTHER">OTHER</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <Input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Search Comments"
+                                    className="w-2/3 ml-2"
+                                />
+                            </div>
+
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-2">
-                                {comments.map((comment, index) => (
+                                {displayedComments.map((comment, index) => (
                                     <div key={index} className="bg-gray-100 p-2 rounded-md">
                                         <p>{comment.content}</p>
-                                        {/* <small>
+                                        <small>
                                             Type: {comment.type}
-                                        </small> */}
-                                        {/* <br />
+                                        </small>
+                                        <br />
                                         <small>
                                             Fundraiser ID: {comment.fundraiserId}
                                         </small>
                                         <br />
                                         <small>
                                             Created At: {new Date(comment.createdAt).toLocaleString()}
-                                        </small> */}
+                                        </small>
                                     </div>
                                 ))}
                             </div>
@@ -227,7 +265,22 @@ export default function DonorPage() {
 
             <Card className="shadow-none mt-8">
                 <CardHeader>
-                    <CardTitle>Comments</CardTitle>
+                    <div className="flex items-center">
+                        <CardTitle>
+                            Comments
+                        </CardTitle>
+                        <Select value={commentType} onValueChange={setCommentType}>
+                            <SelectTrigger className="ml-2 w-20">
+                                {/* Display the current selection */}
+                                <span>{commentType}</span>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="ADD">ADD</SelectItem>
+                                <SelectItem value="REMOVE">REMOVE</SelectItem>
+                                <SelectItem value="OTHER">OTHER</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </CardHeader>
                 <CardContent>
                     <Textarea
@@ -243,7 +296,7 @@ export default function DonorPage() {
                             donorId,
                             fundraiserId,
                             content: commentsInput,
-                            type: "OTHER",
+                            type: commentType,
                         })}
                     >
                         Submit Comment

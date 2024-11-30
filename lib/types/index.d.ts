@@ -129,3 +129,8 @@ declare type SubmitCommentParams = {
     type: ReasonType;
     fundraiserId?: number;
 };
+
+declare type FilterdCommentsParams = {
+    query?: string;
+    type: ReasonType;
+};
