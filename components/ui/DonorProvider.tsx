@@ -124,7 +124,7 @@ export const DonorsProvider = ({ children }) => {
     }
 
     const fetchProgress = async (): Promise<void> => {
-        const totalDonors = donors.length;
+        const totalDonors = backupDonors.length;
         const completed = invitedDonors.size;
         const progress = totalDonors > 0 ? (completed / totalDonors) * 100 : 0;
         console.log("Progress", progress);
