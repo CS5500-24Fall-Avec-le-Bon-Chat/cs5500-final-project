@@ -52,6 +52,29 @@ export const getTasks = async (params: GetTaskParams) => {
     }
 }
 
+export const createEventForTasks = async (params: CreateEventForTasksParam) => {
+    try {
+        if (!tasksLoaded) {
+            await loadDefaultTasks();
+        }
+
+        // Check if the event already exists
+        let event = defaultTasks.find(event => event.eventId === params.eventId);
+        if (!event) {
+            // Create a new event if it doesn't exist
+            event = { eventId: params.eventId, tasks: [] };
+            defaultTasks.push(event);
+            console.log('New event created:', JSON.stringify(event, null, 2));
+            await saveDefaultTasks(); // Save updated tasks only when new event is created
+        }
+
+        return event;
+    } catch (error) {
+        console.error('Error creating event for tasks:', error instanceof Error ? error.message : error);
+        throw new Error('Failed to create event for tasks');
+    }
+}
+
 
 export const createTask = async (params: CreateTaskParam) => {
     try {
@@ -60,31 +83,34 @@ export const createTask = async (params: CreateTaskParam) => {
         }
 
         const { eventId, text, status } = params;
-        console.log('Received params:', eventId, text, status);
+
+        // Validate input parameters
         if (!eventId || !text || !status) {
-            throw new Error('Invalid input');
+            throw new Error('Invalid input: All fields are required (eventId, text, status)');
         }
-        // find the event with the given eventId
-        const event = defaultTasks.find(event => event.eventId === params.eventId);
+
+        // Ensure the event exists or create it
+        let event = defaultTasks.find(event => event.eventId === eventId);
         if (!event) {
-            throw new Error('Event not found');
+            event = await createEventForTasks({ eventId }); // Create the event if not found
         }
-        // add the new task to the event
-        event.tasks.push({
-            id: event.tasks.length + 1,
-            text: params.text,
-            status: params.status
-        });
-        // save the updated tasks
+
+        // Add a new task to the event
+        const newTask = {
+            id: event.tasks.length + 1, // Assign unique task ID
+            text,
+            status,
+        };
+        event.tasks.push(newTask);
+
+        // Save the updated tasks list
         await saveDefaultTasks();
 
-        return defaultTasks;
+        console.log('Task created successfully:', JSON.stringify(newTask, null, 2));
+        return defaultTasks; // Return the updated default task for confirmation
     } catch (error) {
-        if (error instanceof Error) {
-            console.error('Error creating task:', error.message);
-        }
-        console.error('Error creating task:', error);
-        return [];
+        console.error('Error creating task:', error instanceof Error ? error.message : error);
+        throw new Error('Failed to create task');
     }
 }
 

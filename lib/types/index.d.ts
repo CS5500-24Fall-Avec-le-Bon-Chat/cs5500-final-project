@@ -66,6 +66,10 @@ declare type UpdateTaskStatusParam = {
     status: "undone" | "done";
 };
 
+declare type CreateEventForTasksParam = {
+    eventId: number;
+};
+
 declare type CreateTaskParam = {
     eventId: number;
     text: string;
