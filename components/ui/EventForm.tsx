@@ -58,7 +58,6 @@ const EventForm = ({ type }: { type: string }) => {
             }
             const newEvent = await createEvent(eventData);
             setEvent(newEvent);
-            alert("Event has been created successfully");
             return newEvent;
 
         } catch (error) {
