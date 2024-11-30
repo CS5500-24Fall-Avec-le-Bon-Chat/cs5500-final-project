@@ -1,0 +1,502 @@
+[
+    {
+        "donor_id": 1,
+        "comment": "Donor 1 volunteered to lead a team during the BC-Cancer Walk, encouraging community participation.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 2,
+        "comment": "Donor 2 joined the BC-Cancer Dinner as a guest speaker, sharing impactful stories about their support.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 3,
+        "comment": "Donor 3 contributed significantly during the BC-Cancer Art Auction, purchasing pieces to support the cause.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 4,
+        "comment": "Donor 4 sponsored a research grant at the BC-Cancer Gala, helping to fund breakthrough studies.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 5,
+        "comment": "Donor 5 volunteered to lead a team during the BC-Cancer Walk, encouraging community participation.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 6,
+        "comment": "Donor 6 joined the BC-Cancer Dinner as a guest speaker, sharing impactful stories about their support.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 7,
+        "comment": "Donor 7 contributed significantly during the BC-Cancer Art Auction, purchasing pieces to support the cause.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 8,
+        "comment": "Donor 8 sponsored a research grant at the BC-Cancer Gala, helping to fund breakthrough studies.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 9,
+        "comment": "Donor 9 volunteered to lead a team during the BC-Cancer Walk, encouraging community participation.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 10,
+        "comment": "Donor 10 joined the BC-Cancer Dinner as a guest speaker, sharing impactful stories about their support.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 11,
+        "comment": "Donor 11 contributed significantly during the BC-Cancer Art Auction, purchasing pieces to support the cause.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 12,
+        "comment": "Donor 12 sponsored a research grant at the BC-Cancer Gala, helping to fund breakthrough studies.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 13,
+        "comment": "Donor 13 volunteered to lead a team during the BC-Cancer Walk, encouraging community participation.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 14,
+        "comment": "Donor 14 joined the BC-Cancer Dinner as a guest speaker, sharing impactful stories about their support.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 15,
+        "comment": "Donor 15 contributed significantly during the BC-Cancer Art Auction, purchasing pieces to support the cause.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 16,
+        "comment": "Donor 16 sponsored a research grant at the BC-Cancer Gala, helping to fund breakthrough studies.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 17,
+        "comment": "Donor 17 volunteered to lead a team during the BC-Cancer Walk, encouraging community participation.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 18,
+        "comment": "Donor 18 joined the BC-Cancer Dinner as a guest speaker, sharing impactful stories about their support.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 19,
+        "comment": "Donor 19 contributed significantly during the BC-Cancer Art Auction, purchasing pieces to support the cause.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 20,
+        "comment": "Donor 20 sponsored a research grant at the BC-Cancer Gala, helping to fund breakthrough studies.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 21,
+        "comment": "Donor 21 volunteered to lead a team during the BC-Cancer Walk, encouraging community participation.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 22,
+        "comment": "Donor 22 joined the BC-Cancer Dinner as a guest speaker, sharing impactful stories about their support.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 23,
+        "comment": "Donor 23 contributed significantly during the BC-Cancer Art Auction, purchasing pieces to support the cause.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 24,
+        "comment": "Donor 24 sponsored a research grant at the BC-Cancer Gala, helping to fund breakthrough studies.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 25,
+        "comment": "Donor 25 volunteered to lead a team during the BC-Cancer Walk, encouraging community participation.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 26,
+        "comment": "Donor 26 joined the BC-Cancer Dinner as a guest speaker, sharing impactful stories about their support.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 27,
+        "comment": "Donor 27 contributed significantly during the BC-Cancer Art Auction, purchasing pieces to support the cause.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 28,
+        "comment": "Donor 28 sponsored a research grant at the BC-Cancer Gala, helping to fund breakthrough studies.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 29,
+        "comment": "Donor 29 volunteered to lead a team during the BC-Cancer Walk, encouraging community participation.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 30,
+        "comment": "Donor 30 joined the BC-Cancer Dinner as a guest speaker, sharing impactful stories about their support.",
+        "category": "ADD"
+    },
+    {
+        "donor_id": 31,
+        "comment": "Donor 31 prefers to focus on family commitments and requested removal from the mailing list.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 32,
+        "comment": "Donor 32 opted out of all gala invitations due to a change in charitable focus.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 33,
+        "comment": "Donor 33 prefers virtual engagement only and requested not to be invited to in-person events.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 34,
+        "comment": "Donor 34 relocated to another country and requested to stop receiving event invitations.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 35,
+        "comment": "Donor 35 prefers to focus on family commitments and requested removal from the mailing list.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 36,
+        "comment": "Donor 36 opted out of all gala invitations due to a change in charitable focus.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 37,
+        "comment": "Donor 37 prefers virtual engagement only and requested not to be invited to in-person events.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 38,
+        "comment": "Donor 38 relocated to another country and requested to stop receiving event invitations.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 39,
+        "comment": "Donor 39 prefers to focus on family commitments and requested removal from the mailing list.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 40,
+        "comment": "Donor 40 opted out of all gala invitations due to a change in charitable focus.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 41,
+        "comment": "Donor 41 prefers virtual engagement only and requested not to be invited to in-person events.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 42,
+        "comment": "Donor 42 relocated to another country and requested to stop receiving event invitations.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 43,
+        "comment": "Donor 43 prefers to focus on family commitments and requested removal from the mailing list.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 44,
+        "comment": "Donor 44 opted out of all gala invitations due to a change in charitable focus.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 45,
+        "comment": "Donor 45 prefers virtual engagement only and requested not to be invited to in-person events.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 46,
+        "comment": "Donor 46 relocated to another country and requested to stop receiving event invitations.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 47,
+        "comment": "Donor 47 prefers to focus on family commitments and requested removal from the mailing list.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 48,
+        "comment": "Donor 48 opted out of all gala invitations due to a change in charitable focus.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 49,
+        "comment": "Donor 49 prefers virtual engagement only and requested not to be invited to in-person events.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 50,
+        "comment": "Donor 50 relocated to another country and requested to stop receiving event invitations.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 51,
+        "comment": "Donor 51 prefers to focus on family commitments and requested removal from the mailing list.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 52,
+        "comment": "Donor 52 opted out of all gala invitations due to a change in charitable focus.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 53,
+        "comment": "Donor 53 prefers virtual engagement only and requested not to be invited to in-person events.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 54,
+        "comment": "Donor 54 relocated to another country and requested to stop receiving event invitations.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 55,
+        "comment": "Donor 55 prefers to focus on family commitments and requested removal from the mailing list.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 56,
+        "comment": "Donor 56 opted out of all gala invitations due to a change in charitable focus.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 57,
+        "comment": "Donor 57 prefers virtual engagement only and requested not to be invited to in-person events.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 58,
+        "comment": "Donor 58 relocated to another country and requested to stop receiving event invitations.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 59,
+        "comment": "Donor 59 prefers to focus on family commitments and requested removal from the mailing list.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 60,
+        "comment": "Donor 60 opted out of all gala invitations due to a change in charitable focus.",
+        "category": "REMOVE"
+    },
+    {
+        "donor_id": 61,
+        "comment": "Donor 61 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 62,
+        "comment": "Donor 62 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 63,
+        "comment": "Donor 63 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 64,
+        "comment": "Donor 64 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 65,
+        "comment": "Donor 65 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 66,
+        "comment": "Donor 66 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 67,
+        "comment": "Donor 67 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 68,
+        "comment": "Donor 68 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 69,
+        "comment": "Donor 69 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 70,
+        "comment": "Donor 70 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 71,
+        "comment": "Donor 71 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 72,
+        "comment": "Donor 72 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 73,
+        "comment": "Donor 73 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 74,
+        "comment": "Donor 74 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 75,
+        "comment": "Donor 75 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 76,
+        "comment": "Donor 76 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 77,
+        "comment": "Donor 77 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 78,
+        "comment": "Donor 78 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 79,
+        "comment": "Donor 79 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 80,
+        "comment": "Donor 80 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 81,
+        "comment": "Donor 81 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 82,
+        "comment": "Donor 82 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 83,
+        "comment": "Donor 83 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 84,
+        "comment": "Donor 84 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 85,
+        "comment": "Donor 85 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 86,
+        "comment": "Donor 86 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 87,
+        "comment": "Donor 87 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 88,
+        "comment": "Donor 88 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 89,
+        "comment": "Donor 89 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 90,
+        "comment": "Donor 90 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 91,
+        "comment": "Donor 91 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 92,
+        "comment": "Donor 92 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 93,
+        "comment": "Donor 93 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 94,
+        "comment": "Donor 94 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 95,
+        "comment": "Donor 95 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 96,
+        "comment": "Donor 96 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 97,
+        "comment": "Donor 97 prefers updates via email about community cancer awareness initiatives.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 98,
+        "comment": "Donor 98 showed interest in partnering with BC-Cancer to create youth education programs.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 99,
+        "comment": "Donor 99 shared feedback about the event format and suggested including more interactive activities.",
+        "category": "OTHER"
+    },
+    {
+        "donor_id": 100,
+        "comment": "Donor 100 expressed interest in supporting patient wellness programs through additional funding.",
+        "category": "OTHER"
+    }
+]
