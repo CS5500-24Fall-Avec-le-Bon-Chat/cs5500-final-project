@@ -101,7 +101,7 @@ export default function donationDetails() {
               Create Event
             </Button>
           </Link>
-          <ScrollArea className="h-48">
+          <ScrollArea className="max-h-[60vh] overflow-y-auto">
             <ul>
               {events.map((event) => (
                 <li
@@ -143,13 +143,13 @@ export default function donationDetails() {
                 <strong>Completed:</strong>
               </p>
               {/* Goal Circle */}
-              <div className="flex justify-center items-center mt-8">
+              {/* <div className="flex justify-center items-center mt-8">
                 <CircularProgress
                   progress={calculateGoalProgress()}
                   size={120} // Size of the circle
                   strokeWidth={10} // Stroke width of the circle
                 />
-              </div>
+              </div> */}
               <Button
                 variant="outline"
                 className="mt-4"
@@ -167,9 +167,6 @@ export default function donationDetails() {
                       }}
                     ></div>
                   </div>
-                  {/* <span className="ml-2">
-                    {calculateInvitedCount()}/{selectedEvent.donors.length}
-                  </span> */}
                 </div>
               </div>
               <Button
@@ -189,9 +186,6 @@ export default function donationDetails() {
                       }}
                     ></div>
                   </div>
-                  {/* <span className="ml-2">
-                    {calculateInvitedCount()}/{selectedEvent.donors.length}
-                  </span> */}
                 </div>
               </div>
             </CardContent>
