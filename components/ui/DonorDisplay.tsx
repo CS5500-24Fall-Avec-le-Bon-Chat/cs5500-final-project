@@ -24,58 +24,60 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
 
 
     return (
-        <Card className="shadow-none mb-4">
-            <CardHeader>
-                <CardTitle>Donors</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <>
-                    <div className="flex gap-2 mb-4">
-                        <Button
-                            onClick={sortDonrosByName}
-                        >
-                            Sort by Name
-                        </Button>
-                        <Input
-                            type="text"
-                            placeholder="Search Donor"
-                            className="w-1/2"
-                            onChange={(e) => searchDonors(e.target.value)}
-                        />
-                    </div>
-                    <ScrollArea className="max-h-[75vh] overflow-y-auto">
-                        <table className="w-full text-left">
-                            <thead>
-                                <tr className="bg-gray-100">
-                                    <th className="p-2 border-b font-semibold">Name</th>
-                                    <th className="p-2 border-b font-semibold text-center">
-                                        Invited
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {donors.map((donor, index) => (
-                                    <tr key={index} className="hover:bg-gray-50">
-                                        <td className="p-2 border-b">
-                                            <Link href={`/donor?name=${donor.name}`}>
-                                                {donor.name}
-                                            </Link>
-                                        </td>
-                                        <td className="p-2 border-b text-center">
-                                            <input
-                                                type="checkbox"
-                                                checked={invitedDonors.has(donor.id)}
-                                                onChange={() => toggleInvitation({ eventId: props.eventId, donorId: donor.id })}
-                                            />
-                                        </td>
+        <div className="w-5/12 p-4">
+            <Card className="shadow-none mb-4">
+                <CardHeader>
+                    <CardTitle>Donors</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <>
+                        <div className="flex gap-2 mb-4">
+                            <Button
+                                onClick={sortDonrosByName}
+                            >
+                                Sort by Name
+                            </Button>
+                            <Input
+                                type="text"
+                                placeholder="Search Donor"
+                                className="w-1/2"
+                                onChange={(e) => searchDonors(e.target.value)}
+                            />
+                        </div>
+                        <ScrollArea className="max-h-[49vh] min-w-[50vh] overflow-y-auto">
+                            <table className="w-full text-left">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="p-2 border-b font-semibold">Name</th>
+                                        <th className="p-2 border-b font-semibold text-center">
+                                            Invited
+                                        </th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </ScrollArea>
-                </>
-            </CardContent>
-        </Card>
+                                </thead>
+                                <tbody>
+                                    {donors.map((donor, index) => (
+                                        <tr key={index} className="hover:bg-gray-50">
+                                            <td className="p-2 border-b">
+                                                <Link href={`/donor?name=${donor.name}`}>
+                                                    {donor.name}
+                                                </Link>
+                                            </td>
+                                            <td className="p-2 border-b text-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={invitedDonors.has(donor.id)}
+                                                    onChange={() => toggleInvitation({ eventId: props.eventId, donorId: donor.id })}
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </ScrollArea>
+                    </>
+                </CardContent>
+            </Card>
+        </div>
     )
 }
 

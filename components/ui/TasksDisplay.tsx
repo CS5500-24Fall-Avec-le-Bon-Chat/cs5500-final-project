@@ -83,7 +83,7 @@ const TasksDisplay = (props: TasksDisplayProps) => {
                 <CardHeader>
                     <CardTitle>Tasks</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className='max-h-[49vh] min-w-[50vh] overflow-y-auto'>
                     {/* Add Task Input */}
                     <div className="flex items-center mb-4">
                         <Input
