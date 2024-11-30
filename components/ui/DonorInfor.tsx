@@ -106,7 +106,7 @@ export default function DonorPage() {
         try {
             console.log("comments", params);
             const comments = await createComment(params);
-            setComments((prev) => [...prev, comments]);
+            setComments((prev) => [comments, ...prev]);
             setCommentsInput("");
         } catch (error) {
             console.error("Error submitting comment:", error);
