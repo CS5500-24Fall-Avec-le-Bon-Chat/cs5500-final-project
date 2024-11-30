@@ -63,6 +63,11 @@ export default function donationDetails() {
     }
   };
 
+  // format the date
+  const formatDate = (date: string) => {
+    return date ? date.split("T")[0]: "";
+  };
+
 
   useEffect(() => {
     fetchEvents();
@@ -128,13 +133,13 @@ export default function donationDetails() {
                 <strong>Theme:</strong> {selectedEvent.topic}
               </p>
               <p>
-                <strong>Date:</strong> {selectedEvent.date}
+                <strong>Date:</strong> {formatDate(selectedEvent.date)}
               </p>
               <p>
                 <strong>Location:</strong> {selectedEvent.city}
               </p>
               <p>
-                <strong>Time:</strong> {selectedEvent.address}
+                <strong>Address:</strong> {selectedEvent.address}
               </p>
               <p>
                 <strong>Goal: $</strong> {selectedEvent.goal}
