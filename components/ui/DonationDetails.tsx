@@ -101,7 +101,7 @@ export default function donationDetails() {
               Create Event
             </Button>
           </Link>
-          <ScrollArea className="max-h-[60vh] overflow-y-auto">
+          <ScrollArea className="max-h-[60vh] overflow-y-auto bg-white rounded-lg border border-gray-200">
             <ul>
               {events.map((event) => (
                 <li
