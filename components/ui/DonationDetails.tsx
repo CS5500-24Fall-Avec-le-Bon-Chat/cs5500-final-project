@@ -25,6 +25,7 @@ import { getEvents } from "@/lib/actions/event.action";
 import TasksDisplay from "./TasksDisplay";
 import { TasksProvider, useTasks } from "./TasksProvider";
 import { DonorDisplay } from "./DonorDisplay";
+import { useDonors } from "./DonorProvider";
 
 export default function donationDetails() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -34,6 +35,7 @@ export default function donationDetails() {
   const [username, setUsername] = useState("");
 
   const {completedTasksPercentage} = useTasks();
+  const { completedInvitedDonors, fetchProgress, donors, invitedDonors} = useDonors();
 
   const calculateGoalProgress = () => {
     const completed = selectedEvent.completed; // The amount completed
@@ -66,6 +68,10 @@ export default function donationDetails() {
     fetchEvents();
     fetchUserName();
   }, []);
+
+  useEffect(() => {
+    fetchProgress();
+  }, [donors, invitedDonors]);
 
   return (
     <div className="flex mt-32 mx-auto max-w-6xl flex-col gap-8">
@@ -183,7 +189,7 @@ export default function donationDetails() {
                     <div
                       className="bg-blue-500 h-2.5 rounded-full"
                       style={{
-                        // width: `${(calculateInvitedCount() / selectedEvent.donors.length) * 100 || 0}%`,
+                        width: `${completedInvitedDonors}%`,
                       }}
                     ></div>
                   </div>

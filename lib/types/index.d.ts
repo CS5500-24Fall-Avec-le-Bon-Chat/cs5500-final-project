@@ -41,6 +41,11 @@ declare type DonorDisplayProps = {
     eventId: number;
 };
 
+declare type DonorProviderParams = {
+    eventId: number;
+    donorId?: number;
+};
+
 declare type GetTaskParams = {
     eventId: number;
 };
@@ -87,9 +92,10 @@ declare type GetFundraiserByEventParams = {
     eventId: number;
 };
 
-declare type GenerateEventDonorsParams = {
-    donorId: number;
-};
+// declare type GenerateEventDonorsParams = {
+    
+//     donorId: number;
+// };
 
 declare type ToggleInvitationParams = {
     eventId: number;

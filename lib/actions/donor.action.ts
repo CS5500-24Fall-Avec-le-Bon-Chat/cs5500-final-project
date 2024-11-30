@@ -22,7 +22,7 @@ export const createEventAttendee = async (params: CreateEventAttendeeParam) => {
     }
 }
 
-export const fetchDonorsByEventId = async (params: FetchDonorsByEventIdParams) => {
+export const fetchInvitedDonorsByEventId = async (params: FetchDonorsByEventIdParams) => {
     try {
         const response = await fetch(`/api/event-attendee?eventId=${params.eventId}`);
         return response.json();
@@ -30,6 +30,24 @@ export const fetchDonorsByEventId = async (params: FetchDonorsByEventIdParams) =
         console.error(error);
     }
 }
+
+// Fetch fundraisers by event ID
+// Fetch donors by fundraiser ID
+export const fetchDonorByEventId = async (params: FetchDonorsByEventIdParams) => {
+    try {
+        const fundraiserIds = await fetch(`/api/event-fundraiser?eventId=${params.eventId}`);
+        const allDonors = [];
+        for (const fundraiserId of fundraiserIds) {
+            const donorsForFundraiser = await fetch(`/api/donor?fundraiserId=${fundraiserId}`);
+            allDonors.push(...donorsForFundraiser);
+        }
+        console.log(allDonors);
+        return allDonors;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 
 
 export const checkDonorInEvent = async (params: CheckDonorInEventParams) => {

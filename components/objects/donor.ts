@@ -1,4 +1,5 @@
 // components/objects/Donor.ts
+
 export interface Donor {
   name: string;
   totalDonations: number;
@@ -37,5 +38,15 @@ export const transformDonorData = (apiData: DonorAPIResponse[]): Donor[] => {
 
 export interface DonorsContextProps {
   donors: Donor[];
-  setDonors: React.Dispatch<React.SetStateAction<Donor[]>>;
+  fundraiserList: number[];
+  loading: boolean;
+  invitedDonors: Set<number>;
+  backupDonors: Donor[];
+  completedInvitedDonors: number;
+  fetchEventDonors: (params: DonorProviderParams) => Promise<void>;
+  fetchInvitedDonors: (params: DonorProviderParams) => Promise<void>;
+  toggleInvitation: (params: ToggleInvitationParams) => Promise<void>;
+  fetchProgress: () => Promise<void>;
+  searchDonors: (searchTerm: string) => void;
+  sortDonrosByName: () => void;
 }
