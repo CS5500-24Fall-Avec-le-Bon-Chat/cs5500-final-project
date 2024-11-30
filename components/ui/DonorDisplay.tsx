@@ -43,7 +43,7 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
                             onChange={(e) => searchDonors(e.target.value)}
                         />
                     </div>
-                    <ScrollArea className="">
+                    <ScrollArea className="max-h-[75vh] overflow-y-auto">
                         <table className="w-full text-left">
                             <thead>
                                 <tr className="bg-gray-100">
