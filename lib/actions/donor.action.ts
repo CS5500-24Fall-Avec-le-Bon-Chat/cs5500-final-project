@@ -31,6 +31,15 @@ export const fetchInvitedDonorsByEventId = async (params: FetchDonorsByEventIdPa
     }
 }
 
+export const fetchDonorIdByDonorName = async (params: FetchDonorsByDonorNameParams) => {
+    try {
+        const response = await fetch(`/api/donor?name=${params.name}`);
+        return response.json();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 // Fetch fundraisers by event ID
 // Fetch donors by fundraiser ID
 export const fetchDonorByEventId = async (params: FetchDonorsByEventIdParams) => {
@@ -64,6 +73,30 @@ export const deleteEventAttendee = async (param: DeleteEventAttendeeParams) => {
         const response = await fetch("/api/event-attendee", {
             method: "DELETE",
             body: JSON.stringify(param),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return response.json();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const fetchCommentsByDonor = async (params: FetchCommentsByDonorParams) => {
+    try {
+        const response = await fetch(`/api/comment?donorId=${params.donorId}`);
+        return response.json();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const createComment = async (params: CreateCommentParams) => {
+    try {
+        const response = await fetch("/api/comment", {
+            method: "POST",
+            body: JSON.stringify(params),
             headers: {
                 "Content-Type": "application/json",
             },

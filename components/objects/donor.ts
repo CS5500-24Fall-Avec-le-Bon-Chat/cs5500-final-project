@@ -1,5 +1,7 @@
 // components/objects/Donor.ts
 
+import { ReasonType } from "@prisma/client";
+
 export interface Donor {
   name: string;
   totalDonations: number;
@@ -49,4 +51,22 @@ export interface DonorsContextProps {
   fetchProgress: () => Promise<void>;
   searchDonors: (searchTerm: string) => void;
   sortDonrosByName: () => void;
+}
+
+export enum Type {
+  ADD,
+  REMOVE,
+  OTHER,
+}
+
+export interface Comment {
+  id: number;
+  fundraiserId: number;
+  donorId: number;
+  eventId: number;
+  type: Type;
+}
+
+export interface Comments {
+  comments: Comment[];
 }

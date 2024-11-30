@@ -65,8 +65,8 @@ model Comment {
   type      ReasonType @default(ADD)
   content    String @db.VarChar(255)
   createdAt DateTime @default (now())
-  fundraiser    User @relation(fields: [fundraiserId], references: [id], name: "UserComments")
-  fundraiserId  Int
+  fundraiser    User ? @relation(fields: [fundraiserId], references: [id], name: "UserComments")
+  fundraiserId  Int ?
   donor     Donor @relation(fields: [donorId], references: [id])
   donorId   Int
   event     Event? @relation(fields: [eventId], references: [id])

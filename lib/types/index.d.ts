@@ -23,6 +23,10 @@ declare type FetchDonorsByEventIdParams = {
     eventId: number;
 };
 
+declare type FetchDonorsByDonorNameParams = {
+    name: string;
+};
+
 declare type CheckDonorInEventParams = {
     eventId: number;
     donorId: number;
@@ -100,4 +104,28 @@ declare type GetFundraiserByEventParams = {
 declare type ToggleInvitationParams = {
     eventId: number;
     donorId: number;
+};
+
+declare type FetchCommentsByDonorParams = {
+    donorId: number;
+};
+
+declare type CreateCommentParams = {
+    donorId: number;
+    type: ReasonType;
+    fundraiserId?: number;
+    content: string;
+    eventId?: number;
+};
+
+declare type FetchFundraiserByDonorParams = {
+    donorId: number;
+};
+
+declare type SubmitCommentParams = {
+    eventId?: number;
+    donorId: number;
+    content: string;
+    type: ReasonType;
+    fundraiserId?: number;
 };
