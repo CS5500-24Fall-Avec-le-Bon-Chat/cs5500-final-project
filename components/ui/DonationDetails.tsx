@@ -124,12 +124,12 @@ export default function donationDetails() {
         {/* Event Details Column */}
         <div className="w-5/12 p-4 h-3/4">
           <ScrollArea className="h-[65.9vh] overflow-y-auto bg-white rounded-lg border border-gray-200 shadow-sm">
-            <Card className="shadow-none">
+            <Card className="shadow-none border-0">
               <CardHeader>
                 <CardTitle>{selectedEvent.title}</CardTitle>
                 <CardDescription>{selectedEvent.description}</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="shadow-none border-none border-0">
                 <p>
                   <strong>Theme:</strong> {selectedEvent.topic}
                 </p>
