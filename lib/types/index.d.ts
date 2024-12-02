@@ -45,10 +45,12 @@ declare type DeleteEventAttendeeParams = {
 
 declare type TasksDisplayProps = {
     eventId: number;
+    show: boolean;
 };
 
 declare type DonorDisplayProps = {
     eventId: number;
+    show: boolean;
 };
 
 declare type DonorProviderParams = {

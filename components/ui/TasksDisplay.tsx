@@ -78,7 +78,7 @@ const TasksDisplay = (props: TasksDisplayProps) => {
 
     return (
         // {/* List of Tasks or List of Donors Column */}
-        <div className="w-5/12 p-4">
+        <div className={`w-5/12 p-4 ${props.show? "" : "hidden"}`}>
             <Card className="shadow-none mb-4">
                 <CardHeader>
                     <CardTitle>Tasks</CardTitle>

@@ -198,8 +198,8 @@ export default function donationDetails() {
             </Card>
           </ScrollArea>
         </div>
-        {view === "tasks" && <TasksDisplay eventId={selectedEvent.id} />}
-        {view === "donors" && <DonorDisplay eventId={selectedEvent.id} />}
+        <TasksDisplay eventId={selectedEvent.id} show={view==="tasks"}/>
+        <DonorDisplay eventId={selectedEvent.id} show={view==="donors"}/>
       </div>
     </div>
   );

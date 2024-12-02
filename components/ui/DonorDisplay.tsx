@@ -24,7 +24,7 @@ export const DonorDisplay = (props: DonorDisplayProps) => {
 
 
     return (
-        <div className="w-5/12 p-4">
+        <div className={`w-5/12 p-4 ${props.show? "" : "hidden"}`}>
             <Card className="shadow-none mb-4">
                 <CardHeader>
                     <CardTitle>Donors</CardTitle>
