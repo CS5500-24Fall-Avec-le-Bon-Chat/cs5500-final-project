@@ -1,6 +1,10 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [
 `create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Screenshot of the project
+![screenshoot_fundraisersCompanion](https://github.com/user-attachments/assets/385af4a9-8276-407b-be9c-5e38eee5b67f)
+
+
 ## Getting Started
 
 First, install dependencies by running:
